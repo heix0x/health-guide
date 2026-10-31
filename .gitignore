@@ -8,3 +8,4 @@ docs/资料库/
 .*.png
 .*.pdf
 .wbapp_*.genie
+.build_tmp/

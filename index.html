@@ -182,35 +182,34 @@ em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent-2) 
 .flags li::marker{color:var(--accent)}
 .flags p{margin:12px 0 0;font-size:13.5px;color:var(--ink-3);line-height:1.7}
 
-/* ---------- 账本 ---------- */
-.ledger{margin:24px 0 30px;border-top:1px solid var(--line)}
-.led{
-  display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;
-  padding:15px 4px;border-bottom:1px solid var(--line-2);
-  font-size:14px;line-height:1.7;
+/* ---------- 表格：账本 / 清单 ----------
+   用真 table 而不是 grid 拼的假表。打印跨页时 thead 会自动重复到下一页，
+   否则第二页那几行没有表头，读者分不清哪一栏是哪一栏。 */
+.tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin:24px 0 30px}
+.tbl th{
+  text-align:left;vertical-align:bottom;
+  font-size:11px;font-weight:400;letter-spacing:.12em;color:var(--ink-3);
+  padding:0 6px 9px;border-bottom:1px solid var(--line);
 }
-.led .what{font-weight:600;color:var(--ink)}
-.led .soon{color:var(--ink-2)}
-.led .long{color:var(--accent)}
-.ledger-head{
-  display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;
-  padding:0 4px 9px;font-size:11px;letter-spacing:.12em;color:var(--ink-3);
-  border-bottom:1px solid var(--line);
+.tbl td{
+  padding:13px 6px;border-bottom:1px solid var(--line-2);
+  font-size:14px;line-height:1.7;vertical-align:top;
 }
+.tbl tr{break-inside:avoid;page-break-inside:avoid}
 
-/* ---------- 清单表 ---------- */
-.spec{margin:24px 0 30px;border-top:1px solid var(--line)}
-.spec-head,.spec-row{
-  display:grid;grid-template-columns:.85fr 1.05fr 1.15fr;gap:15px;padding:13px 4px;
-}
-.spec-head{
-  font-size:11px;letter-spacing:.12em;color:var(--ink-3);
-  border-bottom:1px solid var(--line);padding-bottom:9px;
-}
-.spec-row{border-bottom:1px solid var(--line-2);font-size:14px;line-height:1.7}
-.spec-row .c1{font-weight:600;color:var(--ink)}
-.spec-row .c2{color:var(--ink-2)}
-.spec-row .c3{color:var(--ink-2);font-size:13.5px}
+.ledger col.w1{width:36%}
+.ledger col.w2{width:30%}
+.ledger col.w3{width:34%}
+.ledger .what{font-weight:600;color:var(--ink)}
+.ledger .soon{color:var(--ink-2)}
+.ledger .long{color:var(--accent)}
+
+.spec col.w1{width:19%}
+.spec col.w2{width:32%}
+.spec col.w3{width:49%}
+.spec td.c1{font-weight:600;color:var(--ink)}
+.spec td.c2{color:var(--ink-2)}
+.spec td.c3{color:var(--ink-2);font-size:13.5px}
 
 /* ---------- 步骤 ---------- */
 .steps{list-style:none;margin:24px 0 28px;padding:0;counter-reset:s}
@@ -297,6 +296,19 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
 .outline a{border-bottom:0}
 .outline span{color:var(--ink-2);font-size:14px}
 
+/* ---------- 纸面索引 ---------- */
+/* 网页靠侧栏跳转，纸上只有页码。这一列只在打印时出现，屏幕上由左侧目录代劳 */
+.idx li{display:grid;grid-template-columns:1fr auto;column-gap:18px;align-items:baseline}
+.idx li b{grid-column:1;grid-row:1}
+.idx li span{grid-column:1;grid-row:2}
+.idx .pg{
+  grid-column:2;grid-row:1 / span 2;align-self:center;
+  font-style:normal;font-size:13px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;letter-spacing:.04em;
+  min-width:2.4em;text-align:right;
+}
+@media screen{.idx .pg{display:none}}
+
 .stub{
   padding:20px 22px;background:var(--paper-2);border-radius:12px;
   font-size:14px;color:var(--ink-2);line-height:1.8;
@@ -318,22 +330,26 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
 .mbar{display:none}
 .sheet{display:none}
 
-@media (max-width:900px){
+@media screen and (max-width:900px){
   .shell{grid-template-columns:1fr}
   .toc{display:none}
   .page{padding:calc(58px + env(safe-area-inset-top)) 22px 90px}
   .ch-head h1{font-size:27px}
   h2{font-size:19px;margin-top:52px}
   .sx-grid{grid-template-columns:1fr}
-  .spec-head{display:none}
-  .spec-row{grid-template-columns:1fr;gap:2px;padding:14px 2px}
-  .spec-row>span::before{content:attr(data-k)"　";font-size:11px;letter-spacing:.08em;color:var(--ink-3)}
-  .spec-row .c1::before{content:""}
-  .led{grid-template-columns:1fr;gap:5px;padding:14px 2px}
-  .ledger-head{display:none}
-  .led .what{font-size:15px;margin-bottom:2px}
-  .led .soon::before{content:"短期　";color:var(--ink-3);font-size:11px;letter-spacing:.08em}
-  .led .long::before{content:"长期　";color:var(--ink-3);font-size:11px;letter-spacing:.08em}
+  /* 表在窄屏上摊成卡片：表头藏掉，每格用 data-k 自己报栏名 */
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block}
+  .tbl thead{display:none}
+  .tbl col{display:none}
+  .tbl{margin:22px 0}
+  .tbl tr{padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .tbl tr:last-child{border-bottom:0}
+  .tbl td{padding:2px 0;border-bottom:0}
+  .tbl td::before{
+    content:attr(data-k)"　";font-size:11px;letter-spacing:.08em;color:var(--ink-3);
+  }
+  .tbl td.c1::before,.tbl td.what::before{content:""}
+  .ledger .what{font-size:15px;margin-bottom:2px}
   .how li{grid-template-columns:1fr;gap:2px}
   .how .k{padding-top:0}
   .cover{padding-top:26px}
@@ -371,7 +387,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   .sheet .print-btn.is-ghost{margin-top:8px}
 }
 
-@media (max-width:420px){
+@media screen and (max-width:420px){
   body{font-size:16.5px}
   .page{padding-left:18px;padding-right:18px}
   .cover h1{font-size:34px}
@@ -406,39 +422,55 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   .sx dt{margin-top:6px}
   .flags{padding:14px 16px;margin:18px 0}
   .led{padding:9px 4px}
-  .spec-row{padding:9px 4px}
+  .tbl td{padding:8px 5px}
   .steps li{padding:8px 0 8px 40px}
   .afterword{margin-top:34px;font-size:13pt}
   .note{margin:16px 0;padding:12px 14px}
   details{margin:14px 0}
-  .foot{margin-top:26px;padding-top:16px}
+  .foot{margin-top:22px;padding-top:14px;break-inside:avoid;page-break-inside:avoid}
   [data-chapter]{display:block!important;animation:none!important;opacity:1!important;transform:none!important;break-before:page;page-break-before:always}
   [data-chapter]:first-of-type{break-before:auto;page-break-before:auto}
   /* 单章打印：只留选中的那一章，且不留首张空白页 */
   html[data-print-scope] [data-chapter]:not([data-print-on]){display:none!important}
   html[data-print-scope] [data-chapter][data-print-first]{break-before:auto!important;page-break-before:auto!important}
-  /* 章末脚注：单章被抽出来复印之后，纸面上还认得出它是谁，顺带带一句免责 */
-  [data-chapter]:not(#start)::after{
-    content:attr(data-title) "　·　本册为健康科普，不构成诊疗建议";
-    display:block;margin-top:22px;padding-top:8px;border-top:1px solid #E2DCD2;
-    font-size:8pt;color:#8A8278;text-align:right;letter-spacing:.02em;
-  }
+  /* 章末那行「第 X 章 · 本册为健康科普」原来用 ::after 生成，问题在于它是一块正文流里的
+     内容：一页装不下时，它会独自掉到下一页，变成一张只有一行的孤页。改成 @page 的跑马脚
+     （书名 + 页码）之后，页脚永远在白边里，正文排版不再被它牵连。
+     免责声明仍在封面与全册末页各有一处。 */
   /* 单章打印时把四行版权页整个收掉——它在这儿只值一行，多出来的会把纸撑出空白页 */
   html[data-print-scope] .foot{display:none!important}
-  /* 全册打印时，最后一章紧跟着版权页，不需要再加一条章末脚注 */
-  html:not([data-print-scope]) #ch7::after{content:none}
   .ch-head h1{font-size:22pt}
   h2{font-size:13pt;break-after:avoid;page-break-after:avoid}
   h3{break-after:avoid;page-break-after:avoid}
   .scene,.sx,.note,.flags,.afterword,.stub,details{break-inside:avoid;page-break-inside:avoid}
   .led{break-inside:avoid;page-break-inside:avoid}
+  /* 表可以跨页（thead 会自动重复），但一行不许被劈成两半 */
+  .tbl thead{display:table-header-group}
+  .tbl tr{break-inside:avoid;page-break-inside:avoid}
   details{border:1px solid #ddd}
   summary::after{display:none}
   a{color:inherit;border-bottom:0}
   em{background:none;font-weight:600}
   .sx-grid{grid-template-columns:1fr 1fr}
 }
-@page{margin:16mm 15mm}
+/* 纸必须是 A4：国内打印店和学校打印机全是 A4，留默认的 Letter 会被缩印或裁掉底边。
+   页脚整条交给 @page 的边距盒（Chrome 支持），左书名、右页码，永远落在白边里，
+   不占正文的行，也就不会把一章的最后一行挤成一张只有脚注的孤页。
+   封面是第 1 页，不印。 */
+@page{
+  size:A4;margin:15mm 14mm;
+  @bottom-left{
+    content:"高中生身体健康指北";
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    font-size:7.5pt;color:#B3AA9E;letter-spacing:.06em;
+  }
+  @bottom-right{
+    content:counter(page);
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    font-size:8.5pt;color:#8C8478;letter-spacing:.06em;
+  }
+}
+@page:first{@bottom-left{content:""}@bottom-right{content:""}}
 </style>
 </head>
 <body>
@@ -469,7 +501,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       <p style="margin:0 0 10px">校内不能带手机，打印一份带进去。</p>
       <button type="button" class="print-btn" id="printBtn">打印全册</button>
       <button type="button" class="print-btn is-ghost" id="printChBtn">只打印这一章<span class="cur" id="curChName">写在前面</span></button>
-      <p>全册约 1 万字。打印窗口里关掉「页眉和页脚」，纸面更干净。</p>
+      <p>全册约 1.1 万字，A4 二十三页。用 <code>dist/pdf/全册.pdf</code> 打印，页码已经排好；在浏览器里直接打印不会有页码。</p>
     </div>
   </aside>
 
@@ -506,17 +538,20 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
 
           <h2><span class="h2n">用法</span>三句话</h2>
           <ul class="how">
-            <li><span class="k">不用从头读</span><span class="v">点一章，直接跳到你在意的那部分；难受的时候翻「你现在这样」那几页，对号入座。<b>它是一本说明书，不是一本小说。</b></span></li>
-            <li><span class="k">在家那两天</span><span class="v">学校不带手机，你大概只有回家时才翻得到这个网页。别指望在校期间能查——<b>打印一份带进去</b>，比记在脑子里靠谱。</span></li>
-            <li><span class="k">红旗先看</span><span class="v">出现黑便、持续剧痛、高烧这类情况，不用往下读了，直接翻到<a href="#ch7" data-target="ch7">第七章</a>。</span></li>
+            <li><span class="k">不用从头读</span><span class="v">翻一章，直接看你在意的那部分；难受的时候回到上面那张索引，对号入座。<b>它是一本说明书，不是一本小说。</b></span></li>
+            <li><span class="k">翻页靠页码</span><span class="v">每一章都从新的一页开始，索引里标了每章从第几页起。纸面上没有链接，找东西先看那张索引，别一页一页翻。</span></li>
+            <li><span class="k">红旗先看</span><span class="v">出现黑便、持续剧痛、高烧这类情况，不用往下读了，直接翻到<a href="#ch7" data-target="ch7">第七章</a>最后一页。</span></li>
           </ul>
 
           <h2><span class="h2n">入口</span>如果你现在就不舒服</h2>
-          <ul class="outline">
-            <li><b><a href="#ch1" data-target="ch1">胃胀、反酸、吃不下、老想上厕所</a></b><span>第一章有八种常见状况的对照表，找到最像你的那条。</span></li>
-            <li><b><a href="#ch3" data-target="ch3">躺下睡不着，越躺越清醒</a></b><span>第三章讲的是「为什么越努力越睡不着」。</span></li>
-            <li><b><a href="#ch4" data-target="ch4">一考试就肚子疼、手心出汗</a></b><span>第四章，先看「为什么『别紧张』这句话没用」。</span></li>
-            <li><b><a href="#ch7" data-target="ch7">发烧了、肚子疼得厉害、不知道要不要请假</a></b><span>第七章，红旗症状和常备药清单都在那儿。</span></li>
+          <ul class="outline idx">
+            <li><b><a href="#ch1" data-target="ch1">胃胀、反酸、吃不下、老想上厕所</a></b><span>第一章 · 八种状况，对号入座</span><i class="pg" data-pg="ch1">3</i></li>
+            <li><b><a href="#ch2" data-target="ch2">早饭来不及、食堂就那几样、返校该带什么</a></b><span>第二章 · 一张清单和一笔用量</span><i class="pg" data-pg="ch2">7</i></li>
+            <li><b><a href="#ch3" data-target="ch3">躺下睡不着，越躺越清醒</a></b><span>第三章 · 越努力越睡不着的原理</span><i class="pg" data-pg="ch3">11</i></li>
+            <li><b><a href="#ch4" data-target="ch4">一考试就肚子疼、三周没回家、夜里难受</a></b><span>第四章 · 紧张之后做什么</span><i class="pg" data-pg="ch4">14</i></li>
+            <li><b><a href="#ch5" data-target="ch5">腰酸、下午犯困、一整天没站起来</a></b><span>第五章 · 课间三分钟</span><i class="pg" data-pg="ch5">16</i></li>
+            <li><b><a href="#ch6" data-target="ch6">眼睛干、度数又涨了、早上洗漱赶不及</a></b><span>第六章 · 看远和九人间</span><i class="pg" data-pg="ch6">18</i></li>
+            <li><b><a href="#ch7" data-target="ch7">发烧了、疼得厉害、不知道要不要请假</a></b><span>第七章 · 红旗清单在最后一页</span><i class="pg" data-pg="ch7">20</i></li>
           </ul>
 
           <div class="note">
@@ -650,24 +685,27 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <h2><span class="h2n">1.3</span>这几个习惯，代价是什么</h2>
         <p>不谈「应该不应该」，只算账。左边是你现在做的，中间是这周你就会感觉到的，右边是三年之后它会拿走的东西。</p>
 
-        <div class="ledger">
-          <div class="ledger-head"><span>习惯</span><span>短期内</span><span>长期</span></div>
-          <div class="led"><span class="what">边走边吃，五分钟解决一顿</span><span class="soon">上午胀气、打嗝</span><span class="long">胃动力紊乱，吃一点就饱</span></div>
-          <div class="led"><span class="what">吃完趴桌上睡二十分钟</span><span class="soon">醒来嘴里发酸</span><span class="long">贲门松弛，反流变成常态</span></div>
-          <div class="led"><span class="what">用零食顶掉一顿正餐</span><span class="soon">半小时后更困</span><span class="long">胃酸空转，黏膜慢性受损</span></div>
-          <div class="led"><span class="what">有便意憋着，等下课</span><span class="soon">肚子胀、放屁多</span><span class="long">直肠反应变迟钝，便秘固化</span></div>
-          <div class="led"><span class="what">胃疼就吃片止痛药顶过去</span><span class="soon">疼是压下去了</span><span class="long">这类药本身伤胃，还可能盖住真实病情</span></div>
-        </div>
+        <table class="ledger tbl">
+          <colgroup><col class="w1"><col class="w2"><col class="w3"></colgroup>
+          <thead><tr><th>习惯</th><th>短期内</th><th>长期</th></tr></thead>
+          <tbody>
+            <tr><td class="what">边走边吃，五分钟解决一顿</td><td class="soon" data-k="短期">上午胀气、打嗝</td><td class="long" data-k="长期">胃动力紊乱，吃一点就饱</td></tr>
+            <tr><td class="what">吃完趴桌上睡二十分钟</td><td class="soon" data-k="短期">醒来嘴里发酸</td><td class="long" data-k="长期">贲门松弛，反流变成常态</td></tr>
+            <tr><td class="what">用零食顶掉一顿正餐</td><td class="soon" data-k="短期">半小时后更困</td><td class="long" data-k="长期">胃酸空转，黏膜慢性受损</td></tr>
+            <tr><td class="what">有便意憋着，等下课</td><td class="soon" data-k="短期">肚子胀、放屁多</td><td class="long" data-k="长期">直肠反应变迟钝，便秘固化</td></tr>
+            <tr><td class="what">胃疼就吃片止痛药顶过去</td><td class="soon" data-k="短期">疼是压下去了</td><td class="long" data-k="长期">布洛芬这类药本身伤胃，还会盖住真实病情</td></tr>
+          </tbody>
+        </table>
 
-        <p>最后一条值得多说一句。止痛药不是不能吃，但「反复胃疼、反复靠止痛药顶」是最糟的一种处理方式——它既没解决问题，又让问题变得更难看清。</p>
+        <p>最后一条值得多说一句。止痛药不是不能吃，但反复胃疼、反复靠止痛药顶，是最糟的一种处理方式——它既没解决问题，又让问题变得更难看清，还顺手在胃黏膜上添了一笔。</p>
 
         <h2><span class="h2n">1.4</span>十分钟，怎么吃对一顿</h2>
         <p>不要求你每顿都吃好。要求的是：一天里有一顿，是坐下来、慢慢吃完的。有这一顿，剩下的就好办很多。</p>
 
         <ul class="steps">
-          <li><b>先找一个「有蛋白质」的</b><span>鸡蛋、牛奶、豆浆、瘦肉、豆腐。食堂打菜时优先挑带肉的，或者加个蛋。蛋白质是唯一能让你撑到下一节下课的东西。</span></li>
+          <li><b>先找一个「有蛋白质」的</b><span>鸡蛋、牛奶、豆浆、瘦肉、豆腐。食堂打菜时优先挑带肉的，或者加个蛋。蛋白质是最能拖住饿的那样东西——一顿里只有碳水，两节课就见底了。</span></li>
           <li><b>再加一个「能嚼的」</b><span>一份青菜、一个玉米、半个红薯。纤维让胃有活干，也让血糖升得慢一点，不至于第三节课就犯困。</span></li>
-          <li><b>水放在饭前，不要饭中猛灌</b><span>饭前一杯水不占胃；吃饭时灌一大杯，会把胃酸冲淡，消化反而变慢。</span></li>
+          <li><b>水放在饭前，不要饭中猛灌</b><span>饭前一杯水不占地方；吃饭时灌一大杯，胃被撑开，胀气来得更快。</span></li>
         </ul>
 
         <details>
@@ -707,18 +745,25 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>所以挑之前先问一句：这东西<em>食堂有没有</em>？</p>
         <p>按这三条筛：食堂给不了、放得住三周、补的是最容易缺的那几样。</p>
 
-        <div class="spec">
-          <div class="spec-head"><span>补什么</span><span>带什么</span><span>为什么食堂补不上</span></div>
-          <div class="spec-row"><span class="c1">钙</span><span class="c2" data-k="带什么">常温纯牛奶，利乐包</span><span class="c3" data-k="为什么">食堂几乎不供奶。膳食指南建议每天 300ml 以上液态奶</span></div>
-          <div class="spec-row"><span class="c1">好脂肪、镁</span><span class="c2" data-k="带什么">原味混合坚果，25g 小包</span><span class="c3" data-k="为什么">食堂不做坚果。膳食宝塔建议每周约 70g，合每天 10g</span></div>
-          <div class="spec-row"><span class="c1">维生素 C、纤维</span><span class="c2" data-k="带什么">苹果、橘子、梨</span><span class="c3" data-k="为什么">食堂水果少，或者干脆没有。指南建议每天 200–350g</span></div>
-          <div class="spec-row"><span class="c1">铁</span><span class="c2" data-k="带什么">真空装牛肉干、卤蛋</span><span class="c3" data-k="为什么">女生月经失血，铁需求比男生高；食堂红肉给多少不稳定</span></div>
-          <div class="spec-row"><span class="c1">错过饭点的蛋白</span><span class="c2" data-k="带什么">无糖豆浆粉、奶粉，小袋装</span><span class="c3" data-k="为什么">食堂只在饭点开门，错过就是错过</span></div>
-          <div class="spec-row"><span class="c1">早饭那一口</span><span class="c2" data-k="带什么">即食燕麦片，小袋</span><span class="c3" data-k="为什么">食堂早饭以白粥馒头为主，两节课后就饿</span></div>
-        </div>
+        <table class="spec tbl">
+          <colgroup><col class="w1"><col class="w2"><col class="w3"></colgroup>
+          <thead><tr><th>补什么</th><th>带什么</th><th>为什么食堂补不上</th></tr></thead>
+          <tbody>
+            <tr><td class="c1">钙</td><td class="c2" data-k="带什么">常温纯牛奶（利乐包），或全脂奶粉</td><td class="c3" data-k="为什么">食堂几乎不供奶。膳食指南建议每天 300ml 以上液态奶</td></tr>
+            <tr><td class="c1">好脂肪、镁</td><td class="c2" data-k="带什么">原味混合坚果，25g 小包</td><td class="c3" data-k="为什么">食堂不做坚果。膳食宝塔建议每周约 70g，合每天 10g</td></tr>
+            <tr><td class="c1">维生素 C、纤维</td><td class="c2" data-k="带什么">苹果、橘子、梨</td><td class="c3" data-k="为什么">食堂水果少，或者干脆没有。指南建议每天 200–350g</td></tr>
+            <tr><td class="c1">铁</td><td class="c2" data-k="带什么">真空装牛肉干、卤蛋</td><td class="c3" data-k="为什么">女生月经失血，铁需求比男生高；食堂红肉给多少不稳定</td></tr>
+            <tr><td class="c1">错过饭点的蛋白</td><td class="c2" data-k="带什么">无糖豆浆粉、奶粉，小袋装</td><td class="c3" data-k="为什么">食堂只在饭点开门，错过就是错过</td></tr>
+            <tr><td class="c1">早饭那一口</td><td class="c2" data-k="带什么">即食燕麦片，小袋</td><td class="c3" data-k="为什么">食堂早饭以白粥馒头为主，两节课后就饿</td></tr>
+          </tbody>
+        </table>
 
         <p>不要带的：酸奶（要冷藏）、切好的水果、熟食、奶油蛋糕。这些东西在柜子里放两天就开始变，而你吃不出来。</p>
         <p>存放三条：柜子最下层，避光，离暖气远一点；开封的先吃；坚果买小包——一整袋开了封，油脂会慢慢氧化，吃到后面那股哈喇味就是坏了。橘子别提前洗，吃之前再洗。</p>
+
+        <p><strong>带多少，先算重量。</strong>三周按每天 300ml 奶算，差不多六升；装利乐包差不多二十四五盒，十二斤上下。加上坚果、水果、燕麦，返校那天你背不动，柜子也塞不下。</p>
+        <p>所以这张清单的主力是奶粉：一样的量，重量不到五分之一，一袋能冲一个月。利乐包只带第一周的七八盒，当早饭的现成货。水果也一样，一次带一周的量；家里中途来不了，就只带放得住的那几种。</p>
+        <p>这张清单真正的作用不是「带齐」，是让你在返校那天分清：哪些东西撑得到第三周，哪些撑不到。</p>
 
         <div class="note">
           <b>关于「补脑」，先说句实话。</b>没有任何一种食物能让人变聪明，也没有哪样东西吃了就能学进去。但有四件事，和上课那几个小时的状态确实有关。
@@ -775,7 +820,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>晚自习结束到熄灯，中间那段时间是最饿的。这不是意志力的问题——晚饭到那时候隔了五六个小时，胃早就空了。</p>
         <p><strong>能吃的：</strong>牛奶、一小袋燕麦、一个水果、一小把坚果。</p>
         <p><strong>尽量不选的：</strong>泡面（汤喝干净的话，一顿的盐就超了）、辣的东西、冰的。</p>
-        <p>时间上留余量：离熄灯至少两小时。第一章说睡前 3 小时不进食，这条在这儿一样成立——吃完立刻躺下，反酸是迟早的事。</p>
+        <p>时间上有个绕不开的冲突：理想是睡前 3 小时不进食，可晚自习结束到熄灯就那么多时间，做不到。做不到就按顺序退——先减量（半杯奶、半个水果，别吃一整份），再减种类（不碰油的、辣的、甜的），最后才是时间。三条里做到一条，夜里反酸的概率就低一截。</p>
 
         <h2><span class="h2n">2.7</span>零食的账</h2>
         <p>零食不是不能吃。要看的只有一件事：它多久让你再饿一次。</p>
@@ -845,7 +890,13 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>反过来，这一小时里最好别做三件事：躺在床上想明天的安排（越想越清醒）；啃一道做不出来的难题（会带着情绪躺下）；和人聊让你上火的话题。</p>
         <p>困意不是等来的，是攒出来的。白天见够光、动够，晚上把灯调暗，它自己会来。</p>
 
-        <h2><span class="h2n">3.7</span>三周回一次家，作息怎么不乱</h2>
+        <h2><span class="h2n">3.7</span>下午那杯</h2>
+        <p>提神的东西不是不能用，是要弄清楚它什么时候走。咖啡因在身体里减掉一半，大约要五小时——下午三点喝下去的一杯，到晚上八点还剩一半，到十一点还有三成。对一个本来就难入睡的人，这点量足够把「十几分钟」拖成一个小时。</p>
+        <p>麻烦在于它不总叫「咖啡」。奶茶、可乐、标着「提神」的功能饮料里都有。奶茶的茶底泡得浓，一杯下去不比咖啡少。</p>
+        <p>所以判断标准不是「我喝的是不是咖啡」，是「我几点喝」。中午之前，多半没事；下午三点之后，那一杯的账记在当天晚上。</p>
+        <p>还有一层：睡不够 → 早上靠它撑 → 晚上更睡不着 → 第二天更要靠它。这个圈一旦转起来，靠意志力是停不下来的，只能从「下午那杯」这一头剪断。</p>
+
+        <h2><span class="h2n">3.8</span>三周回一次家，作息怎么不乱</h2>
         <p>回家那两天最容易发生的事：熬到两三点，睡到中午。当时很爽。</p>
         <p>代价不在那两天，在回学校之后的第三、四天——身体要重新调一遍，而那几天正好是状态最差的时候。</p>
         <p>折中方案：允许自己晚一小时，别晚三小时。回家第一晚可以放开，第二晚往回拉。</p>
@@ -978,10 +1029,13 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>600 度以上算高度近视。它不只是镜片厚一点：视网膜脱落、青光眼、黄斑病变的风险都会跟着上去，而且这些不是「戴眼镜就能解决」的问题。</p>
         <p>所以护眼的目标不是「不戴眼镜」——大概率做不到。是<em>别让它一直涨</em>。</p>
 
-        <h2><span class="h2n">6.2</span>20-20-20 的教室版</h2>
+        <h2><span class="h2n">6.2</span>20-20-20，和它管不到的地方</h2>
         <p>标准做法是：每 20 分钟，看 6 米外的东西 20 秒——这是美国眼科学会给的建议。</p>
         <p>教室里做不到每 20 分钟一次。那就做能做的版本：每节课下课，抬头看窗外最远的东西——树、楼、天，六十秒。</p>
         <p>关键是「远」和「离开近处」，不是「闭眼休息」。闭眼只让眼睛不工作，看远才让睫状肌松开。</p>
+        <p>但这里要分清两件事，不然容易白忙。<strong>看远缓解的是视疲劳</strong>——酸、干、胀，看完确实舒服，可它不改变度数。<strong>和度数涨不涨有关的，是另外两样：每天在户外待多久，以及看近处的总时长。</strong></p>
+        <p>户外光照是目前证据最硬的一条，对还没近视的人效果最明显；已经近视了，它挡不住涨，但仍然是唯一被反复验证过的方向。这件事不花钱，也不用额外挤时间——课间别待在教室里，中午去操场走一圈，就够了一大半。</p>
+        <p>还有一件小事：已经近视的，每年验一次光。看不清黑板别硬撑——度数不够的时候人会眯眼、歪头、越凑越近，那才是度数往上走的路。</p>
 
         <h2><span class="h2n">6.3</span>眼保健操不做了，替代是什么</h2>
         <p>眼保健操真正的作用不是「治近视」，是每天两次强制让眼睛离开书本、活动眼周。它有用，但它有用的部分，是那个「离开」。</p>
@@ -1011,7 +1065,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>红糖姜水能让人舒服一点——热的东西本来就能缓解痉挛。但它不解决原因，别把它当成方案。</p>
 
         <h2><span class="h2n">6.6</span>洗头、内衣、脚</h2>
-        <p><strong>洗头。</strong>一周两三次够了，油性发质可以天天。湿着睡不好，不是迷信——头皮受凉血管收缩，第二天容易头痛。</p>
+        <p><strong>洗头。</strong>一周两三次够了，油性发质可以天天。湿着睡确实不好，但不是因为「受凉」——头发潮着，枕巾和被窝跟着潮，人会在半夜反复醒。吹干，或者至少擦到不滴水再躺。</p>
         <p><strong>内衣。</strong>每天换，手洗，别和外衣一起洗。能晒就晒，阴干差一截。</p>
         <p><strong>脚。</strong>洗完把脚趾缝擦干。鞋两双轮着穿——一双连穿一周，里面能长什么，你不会想知道。</p>
 
@@ -1064,15 +1118,19 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <h2><span class="h2n">7.4</span>抽屉里该有什么</h2>
         <p>既然多数时候是自己扛，那手上有什么就很重要。一份最基本的清单：</p>
 
-        <div class="spec">
-          <div class="spec-head"><span>通用名</span><span>用来对付</span><span>注意</span></div>
-          <div class="spec-row"><span class="c1">对乙酰氨基酚</span><span class="c2" data-k="用来对付">发烧、头痛</span><span class="c3" data-k="注意">很多复方感冒药里已经有它，别叠加着吃</span></div>
-          <div class="spec-row"><span class="c1">布洛芬</span><span class="c2" data-k="用来对付">痛经、头痛、牙痛</span><span class="c3" data-k="注意">别空腹吃；胃不好的饭后吃</span></div>
-          <div class="spec-row"><span class="c1">蒙脱石散</span><span class="c2" data-k="用来对付">急性腹泻</span><span class="c3" data-k="注意">和其他药隔开两小时，它会吸附别人</span></div>
-          <div class="spec-row"><span class="c1">口服补液盐</span><span class="c2" data-k="用来对付">腹泻、呕吐后补水</span><span class="c3" data-k="注意">别用运动饮料代替，糖和盐的比例不对</span></div>
-          <div class="spec-row"><span class="c1">碘伏棉签、创可贴</span><span class="c2" data-k="用来对付">小伤口</span><span class="c3" data-k="注意">伤口脏要先冲洗，再消毒</span></div>
-          <div class="spec-row"><span class="c1">体温计</span><span class="c2" data-k="用来对付">判断要不要报</span><span class="c3" data-k="注意">电子的就够，别凭手感猜</span></div>
-        </div>
+        <table class="spec tbl">
+          <colgroup><col class="w1"><col class="w2"><col class="w3"></colgroup>
+          <thead><tr><th>通用名</th><th>用来对付</th><th>注意</th></tr></thead>
+          <tbody>
+            <tr><td class="c1">对乙酰氨基酚</td><td class="c2" data-k="用来对付">发烧、头痛</td><td class="c3" data-k="注意">很多复方感冒药里已经有它，别叠加着吃</td></tr>
+            <tr><td class="c1">布洛芬</td><td class="c2" data-k="用来对付">痛经、头痛、牙痛</td><td class="c3" data-k="注意">别空腹吃；胃不好的饭后吃</td></tr>
+            <tr><td class="c1">蒙脱石散</td><td class="c2" data-k="用来对付">急性腹泻</td><td class="c3" data-k="注意">和其他药隔开两小时，它会吸附别人</td></tr>
+            <tr><td class="c1">口服补液盐</td><td class="c2" data-k="用来对付">腹泻、呕吐后补水</td><td class="c3" data-k="注意">别用运动饮料代替，糖和盐的比例不对</td></tr>
+            <tr><td class="c1">氯雷他定</td><td class="c2" data-k="用来对付">过敏起的疹子、痒</td><td class="c3" data-k="注意">不太犯困，但别和含抗过敏成分的感冒药叠着吃</td></tr>
+            <tr><td class="c1">碘伏棉签、创可贴</td><td class="c2" data-k="用来对付">小伤口</td><td class="c3" data-k="注意">伤口脏要先冲洗，再消毒</td></tr>
+            <tr><td class="c1">体温计</td><td class="c2" data-k="用来对付">判断要不要报</td><td class="c3" data-k="注意">电子的就够，别凭手感猜</td></tr>
+          </tbody>
+        </table>
 
         <div class="note">
           <b>剂量这里一个都不给。</b>同一个药名，片剂和缓释胶囊的用法就不一样，年龄体重也影响用量——这种事只能看说明书或者问医生。这里能做的是告诉你「它大概是干什么的」，以及「什么时候别乱搭」。
@@ -1080,7 +1138,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p>另外：每年开学清一次抽屉，过期的扔掉。药过期不是「效果差点」，是有的会分解出不该有的东西。</p>
 
         <h2><span class="h2n">7.5</span>红旗症状</h2>
-        <p>比第一章那张更全。出现任何一条，不用再观察。</p>
+        <p>比第一章那张更全，也更重。第一章那张管「该去医务室」，这张管「该往外转」。出现任何一条，不用再观察。</p>
 
         <div class="flags">
           <h3>这九条，一条都不用过夜</h3>
@@ -1110,7 +1168,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p><strong>高中生身体健康指北</strong> · 写给高中生的身体使用说明</p>
         <p class="disc">本册为健康科普，不构成诊疗建议或用药指导。所有药物请遵说明书或医嘱使用；持续不适应及时就医。</p>
         <p>文中场景取自真实校园生活，已作匿名化处理，不指向任何具体个人或学校。</p>
-        <p class="ver">v0.8 · 2026-10-31</p>
+        <p class="ver">v0.9 · 2026-10-31</p>
       </footer>
 
     </div>
