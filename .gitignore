@@ -7,3 +7,4 @@ docs/资料库/
 # 临时截图与测试产物（都以 . 开头）
 .*.png
 .*.pdf
+.wbapp_*.genie

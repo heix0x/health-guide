@@ -89,6 +89,13 @@ body{
   cursor:pointer;transition:background .18s ease;
 }
 .print-btn:hover{background:#A24F2F}
+.print-btn.is-ghost{
+  margin-top:8px;background:transparent;border-color:var(--line);
+  color:var(--ink-2);font-weight:400;letter-spacing:0;text-align:left;
+  line-height:1.35;padding:9px 12px;transition:border-color .18s ease,color .18s ease;
+}
+.print-btn.is-ghost:hover{background:transparent;border-color:var(--accent);color:var(--accent)}
+.print-btn .cur{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;letter-spacing:.02em}
 .toc-foot p{font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
 
 /* ---------- 正文 ---------- */
@@ -361,6 +368,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   }
   .sheet .nav a{font-size:16px;padding:14px 10px}
   .sheet .print-btn{margin-top:26px}
+  .sheet .print-btn.is-ghost{margin-top:8px}
 }
 
 @media (max-width:420px){
@@ -406,6 +414,19 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   .foot{margin-top:26px;padding-top:16px}
   [data-chapter]{display:block!important;animation:none!important;opacity:1!important;transform:none!important;break-before:page;page-break-before:always}
   [data-chapter]:first-of-type{break-before:auto;page-break-before:auto}
+  /* 单章打印：只留选中的那一章，且不留首张空白页 */
+  html[data-print-scope] [data-chapter]:not([data-print-on]){display:none!important}
+  html[data-print-scope] [data-chapter][data-print-first]{break-before:auto!important;page-break-before:auto!important}
+  /* 章末脚注：单章被抽出来复印之后，纸面上还认得出它是谁，顺带带一句免责 */
+  [data-chapter]:not(#start)::after{
+    content:attr(data-title) "　·　本册为健康科普，不构成诊疗建议";
+    display:block;margin-top:22px;padding-top:8px;border-top:1px solid #E2DCD2;
+    font-size:8pt;color:#8A8278;text-align:right;letter-spacing:.02em;
+  }
+  /* 单章打印时把四行版权页整个收掉——它在这儿只值一行，多出来的会把纸撑出空白页 */
+  html[data-print-scope] .foot{display:none!important}
+  /* 全册打印时，最后一章紧跟着版权页，不需要再加一条章末脚注 */
+  html:not([data-print-scope]) #ch7::after{content:none}
   .ch-head h1{font-size:22pt}
   h2{font-size:13pt;break-after:avoid;page-break-after:avoid}
   h3{break-after:avoid;page-break-after:avoid}
@@ -446,8 +467,9 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     </ul>
     <div class="toc-foot">
       <p style="margin:0 0 10px">校内不能带手机，打印一份带进去。</p>
-      <button type="button" class="print-btn" id="printBtn">打印 / 存为 PDF</button>
-      <p>全册约 1 万字，可以只读你需要的那一章。</p>
+      <button type="button" class="print-btn" id="printBtn">打印全册</button>
+      <button type="button" class="print-btn is-ghost" id="printChBtn">只打印这一章<span class="cur" id="curChName">写在前面</span></button>
+      <p>全册约 1 万字。打印窗口里关掉「页眉和页脚」，纸面更干净。</p>
     </div>
   </aside>
 
@@ -455,7 +477,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     <div class="page">
 
       <!-- ==================== 开始 ==================== -->
-      <section data-chapter id="start">
+      <section data-chapter id="start" data-title="写在前面">
         <div class="cover">
           <div class="kicker">给高中生的身体使用说明</div>
           <h1>高中生<br>身体健康指北</h1>
@@ -504,7 +526,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第一章 ==================== -->
-      <section data-chapter id="ch1">
+      <section data-chapter id="ch1" data-title="第一章 · 你的胃，最先撑不住">
         <header class="ch-head">
           <div class="ch-num">第 一 章</div>
           <h1>你的胃，最先撑不住</h1>
@@ -665,7 +687,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第二章 ==================== -->
-      <section data-chapter id="ch2">
+      <section data-chapter id="ch2" data-title="第二章 · 吃：一天三顿，能救回来">
         <header class="ch-head">
           <div class="ch-num">第 二 章</div>
           <h1>吃：一天三顿，能救回来</h1>
@@ -764,7 +786,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第三章 ==================== -->
-      <section data-chapter id="ch3">
+      <section data-chapter id="ch3" data-title="第三章 · 睡：熄灯之后">
         <header class="ch-head">
           <div class="ch-num">第 三 章</div>
           <h1>睡：熄灯之后</h1>
@@ -832,7 +854,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第四章 ==================== -->
-      <section data-chapter id="ch4">
+      <section data-chapter id="ch4" data-title="第四章 · 心：脑子停不下来">
         <header class="ch-head">
           <div class="ch-num">第 四 章</div>
           <h1>心：脑子停不下来</h1>
@@ -884,7 +906,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第五章 ==================== -->
-      <section data-chapter id="ch5">
+      <section data-chapter id="ch5" data-title="第五章 · 动：你每天都在跑">
         <header class="ch-head">
           <div class="ch-num">第 五 章</div>
           <h1>动：你每天都在跑</h1>
@@ -938,7 +960,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第六章 ==================== -->
-      <section data-chapter id="ch6">
+      <section data-chapter id="ch6" data-title="第六章 · 眼与身体：坐 14 小时之后">
         <header class="ch-head">
           <div class="ch-num">第 六 章</div>
           <h1>眼与身体：坐 14 小时之后</h1>
@@ -997,7 +1019,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       </section>
 
       <!-- ==================== 第七章 ==================== -->
-      <section data-chapter id="ch7">
+      <section data-chapter id="ch7" data-title="第七章 · 生病了，去哪儿">
         <header class="ch-head">
           <div class="ch-num">第 七 章</div>
           <h1>生病了，去哪儿</h1>
@@ -1086,9 +1108,9 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
 
       <footer class="foot">
         <p><strong>高中生身体健康指北</strong> · 写给高中生的身体使用说明</p>
-        <p>本册为健康科普，不构成诊疗建议或用药指导。所有药物请遵说明书或医嘱使用；持续不适应及时就医。</p>
+        <p class="disc">本册为健康科普，不构成诊疗建议或用药指导。所有药物请遵说明书或医嘱使用；持续不适应及时就医。</p>
         <p>文中场景取自真实校园生活，已作匿名化处理，不指向任何具体个人或学校。</p>
-        <p class="ver">v0.7 · 2026-10-31</p>
+        <p class="ver">v0.8 · 2026-10-31</p>
       </footer>
 
     </div>
@@ -1101,7 +1123,8 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     <button type="button" id="closeToc" aria-label="关闭目录">×</button>
   </div>
   <ul class="nav" id="navListMobile"></ul>
-  <button type="button" class="print-btn" id="printBtn2">打印 / 存为 PDF</button>
+  <button type="button" class="print-btn" id="printBtn2">打印全册</button>
+  <button type="button" class="print-btn is-ghost" id="printChBtn2">只打印这一章<span class="cur" id="curChName2">写在前面</span></button>
 </div>
 
 <script>
@@ -1115,7 +1138,17 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     titles[s.id] = h ? h.textContent.trim() : '';
   });
 
+  /* 侧栏标签：封面那章的 h1 是书名，目录里却叫「写在前面」，打印按钮上要用后者 */
+  var labels = {};
+  Array.prototype.forEach.call(document.querySelectorAll('#navList a'), function (a) {
+    var sp = a.querySelectorAll('span');
+    if (sp.length) labels[a.getAttribute('data-target')] = sp[sp.length - 1].textContent.trim();
+  });
+  var curId = ids[0];
+
   var mbarTitle = document.getElementById('mbarTitle');
+  var curChName = document.getElementById('curChName');
+  var curChName2 = document.getElementById('curChName2');
   var sheet = document.getElementById('sheet');
   var navMobile = document.getElementById('navListMobile');
 
@@ -1132,6 +1165,10 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       else { a.removeAttribute('aria-current'); }
     });
     mbarTitle.textContent = titles[id] || '高中生身体健康指北';
+    curId = id;
+    var nm = labels[id] || titles[id] || '';
+    if (curChName) curChName.textContent = nm;
+    if (curChName2) curChName2.textContent = nm;
     if (document.documentElement.getAttribute('data-print') !== 'on') {
       window.scrollTo(0, 0);
       requestAnimationFrame(function () { window.scrollTo(0, 0); });
@@ -1164,7 +1201,26 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   document.getElementById('openToc').addEventListener('click', openSheet);
   document.getElementById('closeToc').addEventListener('click', closeSheet);
 
-  function doPrint() {
+  /* 打印范围：null = 全册；给一个 id = 只打那一章。作用力全在打印样式上，屏幕上不变化 */
+  function setScope(id) {
+    var root = document.documentElement;
+    secs.forEach(function (s) {
+      s.removeAttribute('data-print-on');
+      s.removeAttribute('data-print-first');
+    });
+    var hit = null;
+    if (id) {
+      secs.forEach(function (s) { if (s.id === id) hit = s; });
+    }
+    if (!hit) { root.removeAttribute('data-print-scope'); return false; }
+    root.setAttribute('data-print-scope', '1');
+    hit.setAttribute('data-print-on', '');
+    hit.setAttribute('data-print-first', '');
+    return true;
+  }
+
+  function doPrint(scope) {
+    setScope(scope || null);
     document.documentElement.setAttribute('data-print', 'on');
     secs.forEach(function (s) { s.hidden = false; });
     var ds = document.querySelectorAll('details');
@@ -1172,11 +1228,14 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     window.print();
   }
 
-  document.getElementById('printBtn').addEventListener('click', doPrint);
-  document.getElementById('printBtn2').addEventListener('click', doPrint);
+  document.getElementById('printBtn').addEventListener('click', function () { doPrint(null); });
+  document.getElementById('printBtn2').addEventListener('click', function () { doPrint(null); });
+  document.getElementById('printChBtn').addEventListener('click', function () { doPrint(curId); });
+  document.getElementById('printChBtn2').addEventListener('click', function () { doPrint(curId); });
 
   window.addEventListener('afterprint', function () {
     document.documentElement.removeAttribute('data-print');
+    setScope(null);
     document.querySelectorAll('details').forEach(function (d) {
       if (d.dataset.wasClosed) { d.open = false; delete d.dataset.wasClosed; }
     });
@@ -1194,6 +1253,17 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   });
 
   activate(location.hash.slice(1) || ids[0], { focus: false });
+
+  /* ?print=ch3：只设打印范围，不自己弹窗。给命令行批量出 PDF 用，也可以存成「直接打印第三章」的链接 */
+  var qp = null;
+  try { qp = new URLSearchParams(location.search).get('print'); } catch (e) {}
+  if (qp && ids.indexOf(qp) > -1) {
+    activate(qp, { focus: false });
+    setScope(qp);
+    document.querySelectorAll('details').forEach(function (d) {
+      if (!d.open) { d.dataset.wasClosed = '1'; d.open = true; }
+    });
+  }
 
   /* 带 #ch3 直接打开时，浏览器会自动滚到锚点，把标题顶进固定栏底下 */
   function resetTop() { window.scrollTo(0, 0); }
