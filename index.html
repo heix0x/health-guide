@@ -98,6 +98,21 @@ body{
 .print-btn .cur{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;letter-spacing:.02em}
 .toc-foot p{font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
 
+/* ---------- 浮层提示 ---------- */
+/* 只在「打印之后」用：写盘发生在浏览器进程里，页面拿不到进度，
+   所以不做进度条，只把「等两三秒」这句话在对话框关闭的那一刻说出来。 */
+.toast{
+  position:fixed;left:50%;bottom:26px;z-index:80;
+  transform:translate(-50%,12px);
+  max-width:min(90vw,440px);padding:12px 18px;border-radius:12px;
+  background:#2C2823;color:#F7F2EA;
+  font-size:13.5px;line-height:1.65;
+  box-shadow:0 12px 34px rgba(0,0,0,.22);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
 /* ---------- 正文 ---------- */
 main{min-width:0}
 .page{max-width:var(--maxw);margin:0 auto;padding:84px 32px 120px}
@@ -385,6 +400,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   .sheet .nav a{font-size:16px;padding:14px 10px}
   .sheet .print-btn{margin-top:26px}
   .sheet .print-btn.is-ghost{margin-top:8px}
+  .sheet .sheet-tip{margin:14px 0 0;font-size:12px;line-height:1.65;color:var(--ink-3)}
 }
 
 @media screen and (max-width:420px){
@@ -401,7 +417,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
 @media print{
   :root{--paper:#fff;--paper-2:#fff;--card:#fff}
   body{font-size:10pt;line-height:1.72;background:#fff}
-  .toc,.mbar,.sheet,.print-btn,.nav{display:none!important}
+  .toc,.mbar,.sheet,.print-btn,.nav,.toast{display:none!important}
   .shell{display:block}
   .page{max-width:none;padding:0}
   .cover{padding-top:0}
@@ -501,7 +517,8 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
       <p style="margin:0 0 10px">校内不能带手机，打印一份带进去。</p>
       <button type="button" class="print-btn" id="printBtn">打印全册</button>
       <button type="button" class="print-btn is-ghost" id="printChBtn">只打印这一章<span class="cur" id="curChName">写在前面</span></button>
-      <p>全册约 1.1 万字，A4 二十三页。用 <code>dist/pdf/全册.pdf</code> 打印，页码已经排好；在浏览器里直接打印不会有页码。</p>
+      <p>全册 A4 二十三页。要带页码的成品，用 <code>dist/pdf</code> 里那份。</p>
+      <p>在浏览器里存：目标选「另存为 PDF」，存完等两三秒再打开。</p>
     </div>
   </aside>
 
@@ -1168,12 +1185,14 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
         <p><strong>高中生身体健康指北</strong> · 写给高中生的身体使用说明</p>
         <p class="disc">本册为健康科普，不构成诊疗建议或用药指导。所有药物请遵说明书或医嘱使用；持续不适应及时就医。</p>
         <p>文中场景取自真实校园生活，已作匿名化处理，不指向任何具体个人或学校。</p>
-        <p class="ver">v0.9 · 2026-10-31</p>
+        <p class="ver">v0.10 · 2026-10-31</p>
       </footer>
 
     </div>
   </main>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="sheet" id="sheet" aria-hidden="true">
   <div class="head">
@@ -1183,6 +1202,7 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   <ul class="nav" id="navListMobile"></ul>
   <button type="button" class="print-btn" id="printBtn2">打印全册</button>
   <button type="button" class="print-btn is-ghost" id="printChBtn2">只打印这一章<span class="cur" id="curChName2">写在前面</span></button>
+  <p class="sheet-tip">手机大多不出打印框（微信里打开更不行）。要纸质，用电脑打开这个文件。</p>
 </div>
 
 <script>
@@ -1207,6 +1227,18 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   var mbarTitle = document.getElementById('mbarTitle');
   var curChName = document.getElementById('curChName');
   var curChName2 = document.getElementById('curChName2');
+
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  var printStarted = false;
+
+  function toast(msg, ms) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, ms || 9000);
+  }
   var sheet = document.getElementById('sheet');
   var navMobile = document.getElementById('navListMobile');
 
@@ -1283,7 +1315,18 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
     secs.forEach(function (s) { s.hidden = false; });
     var ds = document.querySelectorAll('details');
     ds.forEach(function (d) { if (!d.open) { d.dataset.wasClosed = '1'; d.open = true; } });
+
+    printStarted = false;
     window.print();
+
+    /* 对话框本该在上一行同步弹出。800 毫秒后 beforeprint 还没触发，说明这台设备
+       根本不支持打印——iOS Safari、微信/QQ 内置浏览器都属于这一类。
+       判断依据只用 beforeprint，不猜机型：同一台手机上 Chrome 能打、微信里不能。 */
+    setTimeout(function () {
+      if (!printStarted) {
+        toast('这台设备没弹出打印框。手机上的浏览器——尤其微信里打开的——大多不能打印。要用纸，用电脑打开这个文件。', 12000);
+      }
+    }, 800);
   }
 
   document.getElementById('printBtn').addEventListener('click', function () { doPrint(null); });
@@ -1292,16 +1335,21 @@ details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:va
   document.getElementById('printChBtn2').addEventListener('click', function () { doPrint(curId); });
 
   window.addEventListener('afterprint', function () {
+    printStarted = true;
     document.documentElement.removeAttribute('data-print');
     setScope(null);
     document.querySelectorAll('details').forEach(function (d) {
       if (d.dataset.wasClosed) { d.open = false; delete d.dataset.wasClosed; }
     });
     activate(location.hash.slice(1) || ids[0], { focus: false });
+    /* 写盘是浏览器的事，页面拿不到任何进度。能做的只有把「要等」这句话说在
+       对话框刚关掉的那一刻——不然下一步就是双击一个还没写完的文件。 */
+    toast('存好了？等两三秒再打开——文件还在往硬盘里写，这会儿双击会提示「无法打开」。', 9000);
   });
 
   /* 打印前（Ctrl+P 直接打印的路径）也要展开 */
   window.addEventListener('beforeprint', function () {
+    printStarted = true;
     document.querySelectorAll('details').forEach(function (d) { d.open = true; });
     secs.forEach(function (s) { s.hidden = false; });
   });
