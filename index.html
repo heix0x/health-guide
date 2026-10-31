@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>高中生身体健康指北</title>
+<meta name="description" content="写给高中生的身体健康指南：吃、睡、动、心情，还有你的胃。可以查，可以打印，不用从头读到尾。">
+<meta name="theme-color" content="#FAF7F2">
+<style>
+:root{
+  --paper:#FAF7F2;
+  --paper-2:#F3EDE3;
+  --card:#FFFDF9;
+  --ink:#2A2724;
+  --ink-2:#59534B;
+  --ink-3:#8C8478;
+  --line:#E5DDCF;
+  --line-2:#EFE9DE;
+  --accent:#B85F3C;
+  --accent-2:#F5E6DC;
+  --green:#3F5D4E;
+  --green-2:#E8EEE8;
+  --radius:14px;
+  --maxw:700px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.85;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--accent-2);color:var(--ink)}
+
+/* ---------- 布局 ---------- */
+.shell{display:grid;grid-template-columns:266px minmax(0,1fr)}
+
+/* ---------- 侧栏 ---------- */
+.toc{
+  position:sticky;top:0;height:100vh;
+  padding:38px 22px 26px;
+  background:var(--paper-2);
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.brand{padding:0 6px 26px;border-bottom:1px solid var(--line)}
+.brand .mark{
+  font-size:11px;letter-spacing:.28em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:10px;
+}
+.brand h1{
+  font-size:19px;line-height:1.4;margin:0 0 8px;
+  letter-spacing:.02em;font-weight:700;
+}
+.brand p{margin:0;font-size:12.5px;line-height:1.7;color:var(--ink-3)}
+
+.nav{list-style:none;margin:18px 0 0;padding:0}
+.nav li{margin:0}
+.nav a{
+  display:flex;gap:11px;align-items:baseline;
+  padding:9px 10px;margin-bottom:2px;
+  border:0;border-radius:9px;
+  text-decoration:none;color:var(--ink-2);
+  font-size:14.5px;line-height:1.5;
+  transition:background .18s ease,color .18s ease;
+}
+.nav a:hover{background:rgba(184,95,60,.07);color:var(--ink)}
+.nav a .n{
+  font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;
+  min-width:16px;letter-spacing:.04em;
+}
+.nav a.is-active{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(42,39,36,.05)}
+.nav a.is-active .n{color:var(--accent)}
+
+.toc-foot{padding-top:16px;border-top:1px solid var(--line);margin-top:12px}
+.print-btn{
+  width:100%;padding:11px 12px;border:1px solid var(--accent);
+  background:var(--accent);color:#FFF9F4;border-radius:9px;
+  font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.03em;
+  cursor:pointer;transition:background .18s ease;
+}
+.print-btn:hover{background:#A24F2F}
+.toc-foot p{font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
+
+/* ---------- 正文 ---------- */
+main{min-width:0}
+.page{max-width:var(--maxw);margin:0 auto;padding:84px 32px 120px}
+[data-chapter]{animation:rise .34s ease both;scroll-margin-top:70px}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+.ch-head{margin-bottom:44px}
+.ch-num{
+  font-size:12px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:16px;font-variant-numeric:tabular-nums;
+}
+.ch-head h1{
+  font-size:34px;line-height:1.35;margin:0 0 18px;
+  letter-spacing:-.01em;font-weight:700;
+}
+.lede{
+  font-size:17px;line-height:1.8;color:var(--ink-2);margin:0;
+  padding-left:16px;border-left:2px solid var(--accent-2);
+}
+
+h2{
+  font-size:21px;line-height:1.5;margin:64px 0 20px;
+  font-weight:700;letter-spacing:.005em;
+  padding-bottom:12px;border-bottom:1px solid var(--line-2);
+}
+h2 .h2n{color:var(--accent);font-size:13px;letter-spacing:.16em;margin-right:10px;vertical-align:2px}
+h3{font-size:16.5px;margin:32px 0 10px;font-weight:700}
+p{margin:0 0 18px}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(184,95,60,.3)}
+strong{font-weight:700}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent-2) 62%);padding:0 1px}
+
+/* ---------- 场景卡 ---------- */
+.scene{
+  margin:0 0 34px;padding:24px 26px 18px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:0 1px 3px rgba(42,39,36,.03);
+}
+.scene p{
+  margin:0 0 12px;font-size:15.5px;line-height:2;color:var(--ink);
+}
+.scene figcaption{
+  font-size:12px;color:var(--ink-3);letter-spacing:.04em;
+  padding-top:10px;border-top:1px dashed var(--line);text-align:right;
+}
+
+/* ---------- 摘引 ---------- */
+.pull{
+  margin:26px 0;padding:2px 0 2px 20px;
+  border-left:2px solid var(--accent);
+  font-size:17px;line-height:1.95;color:var(--ink);
+}
+.pull p{margin:0}
+
+/* ---------- 速查卡 ---------- */
+.sx-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:26px 0 30px}
+.sx{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 17px 14px;
+}
+.sx .sx-t{
+  font-size:15px;font-weight:700;margin:0 0 12px;color:var(--ink);
+  line-height:1.5;
+}
+.sx dl{margin:0;font-size:13.5px;line-height:1.7}
+.sx dt{
+  color:var(--ink-3);font-size:11px;letter-spacing:.1em;
+  margin-top:9px;margin-bottom:2px;
+}
+.sx dd{margin:0;color:var(--ink-2)}
+.sx dd.warn{color:var(--accent);font-weight:600}
+
+/* ---------- 红旗 ---------- */
+.flags{
+  margin:30px 0;padding:22px 24px;
+  background:linear-gradient(180deg,#FDF2EC,#FBF6F1);
+  border:1px solid #EDCFC0;border-left:3px solid var(--accent);
+  border-radius:10px;
+}
+.flags h3{margin:0 0 12px;font-size:15px;color:var(--accent);letter-spacing:.02em}
+.flags ul{margin:0;padding-left:18px;font-size:15px;line-height:1.95;color:var(--ink)}
+.flags li::marker{color:var(--accent)}
+.flags p{margin:12px 0 0;font-size:13.5px;color:var(--ink-3);line-height:1.7}
+
+/* ---------- 账本 ---------- */
+.ledger{margin:24px 0 30px;border-top:1px solid var(--line)}
+.led{
+  display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;
+  padding:15px 4px;border-bottom:1px solid var(--line-2);
+  font-size:14px;line-height:1.7;
+}
+.led .what{font-weight:600;color:var(--ink)}
+.led .soon{color:var(--ink-2)}
+.led .long{color:var(--accent)}
+.ledger-head{
+  display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;
+  padding:0 4px 9px;font-size:11px;letter-spacing:.12em;color:var(--ink-3);
+  border-bottom:1px solid var(--line);
+}
+
+/* ---------- 清单表 ---------- */
+.spec{margin:24px 0 30px;border-top:1px solid var(--line)}
+.spec-head,.spec-row{
+  display:grid;grid-template-columns:.85fr 1.05fr 1.15fr;gap:15px;padding:13px 4px;
+}
+.spec-head{
+  font-size:11px;letter-spacing:.12em;color:var(--ink-3);
+  border-bottom:1px solid var(--line);padding-bottom:9px;
+}
+.spec-row{border-bottom:1px solid var(--line-2);font-size:14px;line-height:1.7}
+.spec-row .c1{font-weight:600;color:var(--ink)}
+.spec-row .c2{color:var(--ink-2)}
+.spec-row .c3{color:var(--ink-2);font-size:13.5px}
+
+/* ---------- 步骤 ---------- */
+.steps{list-style:none;margin:24px 0 28px;padding:0;counter-reset:s}
+.steps li{
+  counter-increment:s;position:relative;
+  padding:14px 0 14px 46px;border-bottom:1px solid var(--line-2);
+  font-size:15.5px;line-height:1.8;
+}
+.steps li:last-child{border-bottom:0}
+.steps li::before{
+  content:counter(s);position:absolute;left:0;top:15px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--green-2);color:#31493C;
+  font-size:12.5px;font-weight:700;display:grid;place-items:center;
+}
+.steps b{display:block;font-weight:700;margin-bottom:2px}
+.steps span{color:var(--ink-2)}
+
+/* ---------- 章末结语 ---------- */
+.afterword{
+  margin:66px 0 0;
+  font-size:17.5px;line-height:2.05;color:var(--ink-2);letter-spacing:.01em;
+}
+.afterword::before{
+  content:"";display:block;width:34px;height:2px;
+  background:var(--accent);opacity:.5;margin-bottom:20px;
+}
+
+/* ---------- 提示 ---------- */
+.note{
+  margin:26px 0;padding:16px 18px;
+  background:var(--paper-2);border-radius:10px;
+  font-size:14px;line-height:1.8;color:var(--ink-2);
+}
+.note b{color:var(--ink)}
+
+details{
+  margin:22px 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--card);overflow:hidden;
+}
+summary{
+  padding:14px 18px;cursor:pointer;font-size:14.5px;font-weight:600;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  color:var(--ink-2);
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--accent);font-size:15px;font-weight:400}
+details[open] summary::after{content:"－"}
+details[open] summary{border-bottom:1px solid var(--line-2)}
+details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:var(--ink-2)}
+
+/* ---------- 封面 ---------- */
+.cover{padding-top:64px}
+.cover .kicker{
+  font-size:11.5px;letter-spacing:.3em;color:var(--accent);margin-bottom:26px;
+}
+.cover h1{
+  font-size:clamp(38px,6.4vw,58px);line-height:1.22;margin:0 0 22px;
+  letter-spacing:-.02em;font-weight:700;
+}
+.cover .sub{
+  font-size:17px;color:var(--ink-2);margin:0 0 44px;line-height:1.9;
+}
+.cover .rule{height:1px;background:var(--line);margin:0 0 34px}
+.how{list-style:none;margin:0;padding:0}
+.how li{
+  padding:16px 0;border-bottom:1px solid var(--line-2);
+  display:grid;grid-template-columns:88px 1fr;gap:18px;
+  font-size:15px;line-height:1.8;
+}
+.how li:last-child{border-bottom:0}
+.how .k{font-size:12px;letter-spacing:.1em;color:var(--ink-3);padding-top:3px}
+.how .v{color:var(--ink-2)}
+.how .v b{color:var(--ink)}
+
+/* ---------- 提纲 ---------- */
+.outline{list-style:none;margin:26px 0;padding:0}
+.outline li{
+  padding:15px 0;border-bottom:1px solid var(--line-2);
+  font-size:15px;line-height:1.8;
+}
+.outline li:last-child{border-bottom:0}
+.outline b{display:block;font-weight:700;margin-bottom:3px}
+.outline a{border-bottom:0}
+.outline span{color:var(--ink-2);font-size:14px}
+
+.stub{
+  padding:20px 22px;background:var(--paper-2);border-radius:12px;
+  font-size:14px;color:var(--ink-2);line-height:1.8;
+}
+.stub b{color:var(--accent)}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  margin-top:80px;padding-top:26px;border-top:1px solid var(--line);
+  font-size:12.5px;line-height:1.9;color:var(--ink-3);
+}
+.foot p{margin:0 0 8px}
+.foot .ver{
+  margin-top:18px;padding-top:12px;border-top:1px solid var(--line-2);
+  font-size:11.5px;letter-spacing:.08em;color:var(--ink-3);
+}
+
+/* ---------- 移动端 ---------- */
+.mbar{display:none}
+.sheet{display:none}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .toc{display:none}
+  .page{padding:calc(58px + env(safe-area-inset-top)) 22px 90px}
+  .ch-head h1{font-size:27px}
+  h2{font-size:19px;margin-top:52px}
+  .sx-grid{grid-template-columns:1fr}
+  .spec-head{display:none}
+  .spec-row{grid-template-columns:1fr;gap:2px;padding:14px 2px}
+  .spec-row>span::before{content:attr(data-k)"　";font-size:11px;letter-spacing:.08em;color:var(--ink-3)}
+  .spec-row .c1::before{content:""}
+  .led{grid-template-columns:1fr;gap:5px;padding:14px 2px}
+  .ledger-head{display:none}
+  .led .what{font-size:15px;margin-bottom:2px}
+  .led .soon::before{content:"短期　";color:var(--ink-3);font-size:11px;letter-spacing:.08em}
+  .led .long::before{content:"长期　";color:var(--ink-3);font-size:11px;letter-spacing:.08em}
+  .how li{grid-template-columns:1fr;gap:2px}
+  .how .k{padding-top:0}
+  .cover{padding-top:26px}
+
+  .mbar{
+    display:flex;position:fixed;top:0;left:0;right:0;z-index:60;
+    height:calc(56px + env(safe-area-inset-top));
+    padding:env(safe-area-inset-top) 18px 0;
+    align-items:center;justify-content:space-between;
+    background:rgba(250,247,242,.92);
+    backdrop-filter:saturate(1.6) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .mbar .t{font-size:14px;font-weight:700;letter-spacing:.01em}
+  .mbar button{
+    border:1px solid var(--line);background:var(--card);
+    border-radius:8px;padding:7px 13px;font-family:inherit;
+    font-size:13px;color:var(--ink-2);cursor:pointer;
+  }
+  .sheet{
+    display:block;position:fixed;inset:0;z-index:70;
+    background:var(--paper);padding:26px 22px 40px;
+    overflow-y:auto;transform:translateY(12px);
+    opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;
+  }
+  .sheet.on{opacity:1;transform:none;pointer-events:auto}
+  .sheet .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .sheet .head span{font-size:12px;letter-spacing:.24em;color:var(--accent)}
+  .sheet .head button{
+    border:0;background:none;font-family:inherit;font-size:26px;
+    color:var(--ink-3);cursor:pointer;line-height:1;padding:4px 8px;
+  }
+  .sheet .nav a{font-size:16px;padding:14px 10px}
+  .sheet .print-btn{margin-top:26px}
+}
+
+@media (max-width:420px){
+  body{font-size:16.5px}
+  .page{padding-left:18px;padding-right:18px}
+  .cover h1{font-size:34px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---------- 打印 ---------- */
+@media print{
+  :root{--paper:#fff;--paper-2:#fff;--card:#fff}
+  body{font-size:10pt;line-height:1.72;background:#fff}
+  .toc,.mbar,.sheet,.print-btn,.nav{display:none!important}
+  .shell{display:block}
+  .page{max-width:none;padding:0}
+  .cover{padding-top:0}
+  .cover p{margin:0 0 7px}
+  .cover h2{margin:18px 0 10px}
+  .cover .how li{padding:8px 0;break-inside:avoid}
+  .cover .outline li{padding:9px 0;break-inside:avoid}
+  .pull{margin:14px 0;padding:2px 0 2px 16px}
+  p{margin:0 0 9px}
+  h2{margin:26px 0 12px;font-size:13pt;padding-bottom:8px}
+  h3{margin:16px 0 6px;font-size:11pt}
+  .ch-head{margin-bottom:22px}
+  .scene{padding:16px 18px 12px;margin-bottom:20px}
+  .scene p{margin-bottom:8px;line-height:1.8}
+  .sx{padding:12px 13px 10px}
+  .sx-grid{gap:9px;margin:14px 0 18px}
+  .sx .sx-t{margin-bottom:8px;font-size:10.5pt}
+  .sx dt{margin-top:6px}
+  .flags{padding:14px 16px;margin:18px 0}
+  .led{padding:9px 4px}
+  .spec-row{padding:9px 4px}
+  .steps li{padding:8px 0 8px 40px}
+  .afterword{margin-top:34px;font-size:13pt}
+  .note{margin:16px 0;padding:12px 14px}
+  details{margin:14px 0}
+  .foot{margin-top:26px;padding-top:16px}
+  [data-chapter]{display:block!important;animation:none!important;opacity:1!important;transform:none!important;break-before:page;page-break-before:always}
+  [data-chapter]:first-of-type{break-before:auto;page-break-before:auto}
+  .ch-head h1{font-size:22pt}
+  h2{font-size:13pt;break-after:avoid;page-break-after:avoid}
+  h3{break-after:avoid;page-break-after:avoid}
+  .scene,.sx,.note,.flags,.afterword,.stub,details{break-inside:avoid;page-break-inside:avoid}
+  .led{break-inside:avoid;page-break-inside:avoid}
+  details{border:1px solid #ddd}
+  summary::after{display:none}
+  a{color:inherit;border-bottom:0}
+  em{background:none;font-weight:600}
+  .sx-grid{grid-template-columns:1fr 1fr}
+}
+@page{margin:16mm 15mm}
+</style>
+</head>
+<body>
+
+<div class="mbar">
+  <span class="t" id="mbarTitle">高中生身体健康指北</span>
+  <button type="button" id="openToc" aria-label="打开目录">目录</button>
+</div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="brand">
+      <div class="mark">健康指北</div>
+      <h1>高中生身体健康指北</h1>
+      <p>吃、睡、动、心情，还有你的胃</p>
+    </div>
+    <ul class="nav" id="navList">
+      <li><a href="#start" data-target="start"><span class="n">—</span><span>写在前面</span></a></li>
+      <li><a href="#ch1" data-target="ch1"><span class="n">01</span><span>你的胃，最先撑不住</span></a></li>
+      <li><a href="#ch2" data-target="ch2"><span class="n">02</span><span>吃：一天三顿，能救回来</span></a></li>
+      <li><a href="#ch3" data-target="ch3"><span class="n">03</span><span>睡：熄灯之后</span></a></li>
+      <li><a href="#ch4" data-target="ch4"><span class="n">04</span><span>心：脑子停不下来</span></a></li>
+      <li><a href="#ch5" data-target="ch5"><span class="n">05</span><span>动：你每天都在跑</span></a></li>
+      <li><a href="#ch6" data-target="ch6"><span class="n">06</span><span>眼与身体：坐 14 小时之后</span></a></li>
+      <li><a href="#ch7" data-target="ch7"><span class="n">07</span><span>生病了，去哪儿</span></a></li>
+    </ul>
+    <div class="toc-foot">
+      <p style="margin:0 0 10px">校内不能带手机，打印一份带进去。</p>
+      <button type="button" class="print-btn" id="printBtn">打印 / 存为 PDF</button>
+      <p>全册约 1 万字，可以只读你需要的那一章。</p>
+    </div>
+  </aside>
+
+  <main>
+    <div class="page">
+
+      <!-- ==================== 开始 ==================== -->
+      <section data-chapter id="start">
+        <div class="cover">
+          <div class="kicker">给高中生的身体使用说明</div>
+          <h1>高中生<br>身体健康指北</h1>
+          <p class="sub">吃、睡、动、心情，还有你的胃。<br>可以查，可以打印，不用从头读到尾。</p>
+          <div class="rule"></div>
+
+          <p>高中三年，你会听到很多「要加油」。</p>
+          <p>这本书不加油。它想的是另一件事：别让你在半路上垮掉。</p>
+          <p>做法只有三件——说清楚身体是怎么一点点出问题的；帮你判断现在这个状况算不算事；告诉你什么时候该停下来，去医务室或者医院。</p>
+
+          <p>先给你看正文里的一句——</p>
+          <div class="pull">
+            <p>「还行吧」这三个字，是这个群体最标准的一种回答。它不代表没事，它代表<b>还没到忍不住的程度</b>。</p>
+          </div>
+          <p>如果你读到这儿停了一下，这本书大概就是写给你的。</p>
+
+          <h2><span class="h2n">说明</span>这些话凭什么信</h2>
+          <ul class="how">
+            <li><span class="k">数字有出处</span><span class="v">每个数字都标了来源。查不到出处的，我们不写——宁可少一个数字。</span></li>
+            <li><span class="k">不卖东西</span><span class="v">不推荐保健品，也没有任何要你买的东西。</span></li>
+            <li><span class="k">不够就说不够</span><span class="v">证据不足的地方会直说不够。比如「吃什么能让人变聪明」，这条我们查过，最后没写进去。</span></li>
+            <li><span class="k">有红线</span><span class="v">九条不能拖的情况，单独列在第七章，叫「红旗」。</span></li>
+          </ul>
+
+          <p>这本书里没有一件事是必须做的。它把账算给你看，怎么选是你的事。</p>
+
+          <h2><span class="h2n">用法</span>三句话</h2>
+          <ul class="how">
+            <li><span class="k">不用从头读</span><span class="v">点一章，直接跳到你在意的那部分；难受的时候翻「你现在这样」那几页，对号入座。<b>它是一本说明书，不是一本小说。</b></span></li>
+            <li><span class="k">在家那两天</span><span class="v">学校不带手机，你大概只有回家时才翻得到这个网页。别指望在校期间能查——<b>打印一份带进去</b>，比记在脑子里靠谱。</span></li>
+            <li><span class="k">红旗先看</span><span class="v">出现黑便、持续剧痛、高烧这类情况，不用往下读了，直接翻到<a href="#ch7" data-target="ch7">第七章</a>。</span></li>
+          </ul>
+
+          <h2><span class="h2n">入口</span>如果你现在就不舒服</h2>
+          <ul class="outline">
+            <li><b><a href="#ch1" data-target="ch1">胃胀、反酸、吃不下、老想上厕所</a></b><span>第一章有八种常见状况的对照表，找到最像你的那条。</span></li>
+            <li><b><a href="#ch3" data-target="ch3">躺下睡不着，越躺越清醒</a></b><span>第三章讲的是「为什么越努力越睡不着」。</span></li>
+            <li><b><a href="#ch4" data-target="ch4">一考试就肚子疼、手心出汗</a></b><span>第四章，先看「为什么『别紧张』这句话没用」。</span></li>
+            <li><b><a href="#ch7" data-target="ch7">发烧了、肚子疼得厉害、不知道要不要请假</a></b><span>第七章，红旗症状和常备药清单都在那儿。</span></li>
+          </ul>
+
+          <div class="note">
+            <b>一句说明。</b>这本册子是科普，不是诊断。它给的是「大概率」和「怎么办」，不是「你得了什么病」。持续不舒服，去校医务室或者医院——那里的医生能看到你，而这本书看不到。
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 第一章 ==================== -->
+      <section data-chapter id="ch1">
+        <header class="ch-head">
+          <div class="ch-num">第 一 章</div>
+          <h1>你的胃，最先撑不住</h1>
+          <p class="lede">高中三年，身体最先出问题的地方，大概率不是脑子，是胃。</p>
+        </header>
+
+        <figure class="scene">
+          <p>六点四十，从食堂出来，手里一个饼。走到宿舍楼下正好啃完，塑料袋扔进门口的桶里。</p>
+          <p>上午第二节课，胃里开始发胀，像塞了团湿棉花。中午不太想吃，扒了两口。晚自习前又饿，从柜子里翻出两个从家里带来的小面包。</p>
+          <p>十一点躺下，肚子里咕噜咕噜地响。药盒在枕头边上，一直没打开。</p>
+          <figcaption>寄宿学校的一个普通早上</figcaption>
+        </figure>
+
+        <p>这不是谁的特例。你翻开任何一个高三学生的抽屉，大概率能找到一盒消食片；问一句「胃怎么样」，得到的回答多半是「还行吧」，然后补一句「就是有时候胀」。</p>
+        <p>「还行吧」这三个字，是这个群体最标准的一种回答。它不代表没事，它代表<em>还没到忍不住的程度</em>。</p>
+
+        <h2><span class="h2n">1.1</span>胃为什么最先垮</h2>
+
+        <p>胃是个特别被动的器官。它不挑你给它什么，只按你给的节奏干活。你给它什么温度、什么速度、什么时间，它就照着反应——而且从不抗议，只是记账。</p>
+
+        <h3>第一笔账：吃得太快</h3>
+        <p>咀嚼是消化的第一步。牙齿没干的活，会原封不动地推给胃。一口饭嚼五下就咽，胃就得用几倍的力气去磨。更麻烦的是空气——边走边吃、边说话边吃，吞进去的气量会翻好几倍。你觉得「胀」，很大一部分不是食物，是气。</p>
+
+        <h3>第二笔账：时间乱</h3>
+        <p>胃酸不是随时待命的。它有自己的分泌节律，大致跟着你平时的饭点走。今天七点吃、明天十二点吃，胃酸就会在错的时间出现：该有食物的时候空转，烧的是自己的黏膜；食物真来了，酸又不够，消化不动，还是胀。</p>
+
+        <h3>第三笔账：吃完就躺</h3>
+        <p>胃和食管之间有个阀门，叫贲门。趴桌、平躺、弯腰，腹压一高，胃里的东西就往上顶。烧心、反酸、喉咙里泛酸味，多半是这么来的。二十分钟的午睡能救回下午的课，但趴着睡的那二十分钟，胃在倒着干活。</p>
+
+        <h3>还有两笔，不那么直接</h3>
+        <p><strong>睡不够。</strong>胃黏膜的修复主要在夜里进行。睡不够，修复时间就不够，黏膜的防御力跟着下降。这也是为什么熬夜之后的第二天，胃特别容易不舒服——不是巧合。</p>
+        <p><strong>压力大。</strong>人紧张的时候，身体会切到应急模式：血液优先供给肌肉和大脑，消化系统被暂时关掉。偶尔一次没事。但如果这种状态持续几个月——月考、排名、家长会、倒计时牌——胃肠就会换一种方式提醒你：一考试就肚子疼，一进考场就想上厕所，吃什么都胀。</p>
+        <p>这不是「心理作用」。这是真实的生理反应，有明确的机制，也有明确的应对办法。</p>
+
+        <h2><span class="h2n">1.2</span>现在这个状况，算不算事</h2>
+        <p>下面这八种，是寄宿学校里最常见的。找到最像你的那条，看右边两栏。</p>
+
+        <div class="sx-grid">
+          <div class="sx">
+            <p class="sx-t">吃完饭胀、老打嗝</p>
+            <dl>
+              <dt>大概率是</dt><dd>吃太快、吞气多，或者一顿吃太饱</dd>
+              <dt>现在能做</dt><dd>这顿慢点吃，饭后走十分钟，别马上坐下</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">连续两周以上没好转，或者体重在掉</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">早上起来恶心、不想吃</p>
+            <dl>
+              <dt>大概率是</dt><dd>前一晚吃太晚或太多，胃还没排空</dd>
+              <dt>现在能做</dt><dd>睡前 3 小时别再进食；早上先喝两口温水</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">反复呕吐，或者吐到喝不进水</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">反酸、胸口烧</p>
+            <dl>
+              <dt>大概率是</dt><dd>吃完就躺、吃太饱，贲门关不严</dd>
+              <dt>现在能做</dt><dd>饭后两小时别躺；睡觉把枕头垫高一点</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">吞咽困难，或者体重不明原因下降</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">肚子咕噜、放屁多</p>
+            <dl>
+              <dt>大概率是</dt><dd>吞气、乳糖不耐、豆类或碳酸饮料</dd>
+              <dt>现在能做</dt><dd>少喝碳酸；吃东西时把嘴闭上嚼</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">伴随腹泻、发烧，或者便里有黏液</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">三四天没排便</p>
+            <dl>
+              <dt>大概率是</dt><dd>水喝太少、纤维太少、坐得太久</dd>
+              <dt>现在能做</dt><dd>今天多喝两杯水，课间绕操场走一圈</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">超过一周，或者便中带血</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">一紧张就肚子疼、想上厕所</p>
+            <dl>
+              <dt>大概率是</dt><dd>情绪相关的肠道反应，这个年龄段很常见</dd>
+              <dt>现在能做</dt><dd>把呼吸放慢，呼气比吸气长；别空腹喝冷饮</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">疼到没法上课，或者已经影响到考试</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">疼得冒冷汗、位置固定、按下去更疼</p>
+            <dl>
+              <dt>大概率是</dt><dd>不是普通的「胃不舒服」，需要人看一眼</dd>
+              <dt>现在能做</dt><dd>别再忍，也别自己加药</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">现在就去，别等下课</dd>
+            </dl>
+          </div>
+          <div class="sx">
+            <p class="sx-t">一天拉三次以上、水样</p>
+            <dl>
+              <dt>大概率是</dt><dd>急性腹泻，多数是吃坏了或受凉</dd>
+              <dt>现在能做</dt><dd>补口服补液盐，别只灌白开水</dd>
+              <dt>什么时候该去医务室</dt><dd class="warn">口干、尿少、站起来发晕——这是脱水</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="flags">
+          <h3>出现下面任何一条，不用再观察</h3>
+          <ul>
+            <li>大便发黑、像柏油，或者呕出血</li>
+            <li>肚子持续剧痛超过 6 小时，而且越来越重</li>
+            <li>发烧超过 38.5℃</li>
+            <li>明显脱水：口干、尿少、站起来发晕</li>
+            <li>没刻意减肥，体重却在往下掉</li>
+          </ul>
+          <p>这几条不代表一定很严重，但它们都过了「自己扛一扛」的界限。去医务室，或者让家里来接。</p>
+        </div>
+
+        <div class="note">
+          <b>去医务室之前，先在心里过三样：</b>什么时候开始的、吃了什么、疼了多久。这三样比「我肚子疼」有用得多——第七章还会用到。
+        </div>
+
+        <h2><span class="h2n">1.3</span>这几个习惯，代价是什么</h2>
+        <p>不谈「应该不应该」，只算账。左边是你现在做的，中间是这周你就会感觉到的，右边是三年之后它会拿走的东西。</p>
+
+        <div class="ledger">
+          <div class="ledger-head"><span>习惯</span><span>短期内</span><span>长期</span></div>
+          <div class="led"><span class="what">边走边吃，五分钟解决一顿</span><span class="soon">上午胀气、打嗝</span><span class="long">胃动力紊乱，吃一点就饱</span></div>
+          <div class="led"><span class="what">吃完趴桌上睡二十分钟</span><span class="soon">醒来嘴里发酸</span><span class="long">贲门松弛，反流变成常态</span></div>
+          <div class="led"><span class="what">用零食顶掉一顿正餐</span><span class="soon">半小时后更困</span><span class="long">胃酸空转，黏膜慢性受损</span></div>
+          <div class="led"><span class="what">有便意憋着，等下课</span><span class="soon">肚子胀、放屁多</span><span class="long">直肠反应变迟钝，便秘固化</span></div>
+          <div class="led"><span class="what">胃疼就吃片止痛药顶过去</span><span class="soon">疼是压下去了</span><span class="long">这类药本身伤胃，还可能盖住真实病情</span></div>
+        </div>
+
+        <p>最后一条值得多说一句。止痛药不是不能吃，但「反复胃疼、反复靠止痛药顶」是最糟的一种处理方式——它既没解决问题，又让问题变得更难看清。</p>
+
+        <h2><span class="h2n">1.4</span>十分钟，怎么吃对一顿</h2>
+        <p>不要求你每顿都吃好。要求的是：一天里有一顿，是坐下来、慢慢吃完的。有这一顿，剩下的就好办很多。</p>
+
+        <ul class="steps">
+          <li><b>先找一个「有蛋白质」的</b><span>鸡蛋、牛奶、豆浆、瘦肉、豆腐。食堂打菜时优先挑带肉的，或者加个蛋。蛋白质是唯一能让你撑到下一节下课的东西。</span></li>
+          <li><b>再加一个「能嚼的」</b><span>一份青菜、一个玉米、半个红薯。纤维让胃有活干，也让血糖升得慢一点，不至于第三节课就犯困。</span></li>
+          <li><b>水放在饭前，不要饭中猛灌</b><span>饭前一杯水不占胃；吃饭时灌一大杯，会把胃酸冲淡，消化反而变慢。</span></li>
+        </ul>
+
+        <details>
+          <summary>如果只有十分钟，只能在路上吃</summary>
+          <div class="d-body">
+            <p><strong>食堂打包：</strong>米饭 + 一份带肉的菜 + 一份青菜。带回宿舍吃没问题，但坐下来吃，别站着扒完。</p>
+            <p><strong>只能买个饼：</strong>配一杯奶，或者加个鸡蛋。奶要是食堂没有，就自己带一箱进来。饼管饱，但撑不到第四节课——缺的是蛋白质。</p>
+            <p><strong>早饭是最不该省的一顿。</strong>一上午六节课，空着肚子撑到中午，胃酸空转的时间比你想的长。</p>
+          </div>
+        </details>
+
+        <div class="note">
+          真正决定这三周吃得好不好的，不是你每天在窗口前挑什么，是返校那天箱子里装了什么。<b>这件事放在<a href="#ch2" data-target="ch2">第二章</a>。</b>
+        </div>
+
+        <p class="afterword">胃很能忍。它不舒服的时候不吭声，等它吭声，通常已经忍了很久。</p>
+      </section>
+
+      <!-- ==================== 第二章 ==================== -->
+      <section data-chapter id="ch2">
+        <header class="ch-head">
+          <div class="ch-num">第 二 章</div>
+          <h1>吃：一天三顿，能救回来</h1>
+          <p class="lede">问题通常不是「不知道要健康」，是没时间、没条件、没得选。</p>
+        </header>
+        <figure class="scene">
+          <p>返校那天下午，箱子摊在床上。</p>
+          <p>妈妈往缝里塞核桃，说这个顶饿。你说装不下了，她还是塞进去了。</p>
+          <p>箱子拉链是硬拉上的。</p>
+          <p>三周后回来，那袋核桃还在柜子最里面，一动没动。</p>
+          <figcaption>返校那天的下午</figcaption>
+        </figure>
+
+        <h2><span class="h2n">2.1</span>返校那天，你其实在决定三周的饭</h2>
+        <p>装行李的时候，大部分人是按「能放多久」挑的：饼干、面包、火腿肠、泡面，越耐放越往里塞。</p>
+        <p>结果背了三周，真吃进去的还是食堂那几样，多出来的全是碳水。家里塞的那袋核桃，往往到第三周还躺在柜子里。</p>
+        <p>所以挑之前先问一句：这东西<em>食堂有没有</em>？</p>
+        <p>按这三条筛：食堂给不了、放得住三周、补的是最容易缺的那几样。</p>
+
+        <div class="spec">
+          <div class="spec-head"><span>补什么</span><span>带什么</span><span>为什么食堂补不上</span></div>
+          <div class="spec-row"><span class="c1">钙</span><span class="c2" data-k="带什么">常温纯牛奶，利乐包</span><span class="c3" data-k="为什么">食堂几乎不供奶。膳食指南建议每天 300ml 以上液态奶</span></div>
+          <div class="spec-row"><span class="c1">好脂肪、镁</span><span class="c2" data-k="带什么">原味混合坚果，25g 小包</span><span class="c3" data-k="为什么">食堂不做坚果。膳食宝塔建议每周约 70g，合每天 10g</span></div>
+          <div class="spec-row"><span class="c1">维生素 C、纤维</span><span class="c2" data-k="带什么">苹果、橘子、梨</span><span class="c3" data-k="为什么">食堂水果少，或者干脆没有。指南建议每天 200–350g</span></div>
+          <div class="spec-row"><span class="c1">铁</span><span class="c2" data-k="带什么">真空装牛肉干、卤蛋</span><span class="c3" data-k="为什么">女生月经失血，铁需求比男生高；食堂红肉给多少不稳定</span></div>
+          <div class="spec-row"><span class="c1">错过饭点的蛋白</span><span class="c2" data-k="带什么">无糖豆浆粉、奶粉，小袋装</span><span class="c3" data-k="为什么">食堂只在饭点开门，错过就是错过</span></div>
+          <div class="spec-row"><span class="c1">早饭那一口</span><span class="c2" data-k="带什么">即食燕麦片，小袋</span><span class="c3" data-k="为什么">食堂早饭以白粥馒头为主，两节课后就饿</span></div>
+        </div>
+
+        <p>不要带的：酸奶（要冷藏）、切好的水果、熟食、奶油蛋糕。这些东西在柜子里放两天就开始变，而你吃不出来。</p>
+        <p>存放三条：柜子最下层，避光，离暖气远一点；开封的先吃；坚果买小包——一整袋开了封，油脂会慢慢氧化，吃到后面那股哈喇味就是坏了。橘子别提前洗，吃之前再洗。</p>
+
+        <div class="note">
+          <b>关于「补脑」，先说句实话。</b>没有任何一种食物能让人变聪明，也没有哪样东西吃了就能学进去。但有四件事，和上课那几个小时的状态确实有关。
+        </div>
+        <p><strong>空腹上课。</strong>不吃早饭的那一上午，注意力和记忆力都比吃了的差。这条在系统综述里是最稳的一个结论。</p>
+        <p><strong>脱水。</strong>身体掉 2% 的水，注意力和反应速度就会往下走。而很多人一上午想不起来喝，因为不渴——不渴不等于不缺。</p>
+        <p><strong>缺铁。</strong>缺铁最先表现出来的不是脸色苍白，是「累、注意力不集中」。青春期女生因为月经失血，是重点人群。</p>
+        <p><strong>血糖大起大落。</strong>白粥馒头消化快，两节课后就饿；饿急了拿零食顶，半小时后更困，然后下一顿又吃不下。</p>
+        <p>这四条都不靠补品：早饭别跳、水别断、每周吃几次红肉、别拿零食当饭。就这样。</p>
+
+        <h2><span class="h2n">2.2</span>一天到底吃多少</h2>
+        <p>不用称，不用记热量。用手比就行：</p>
+        <p><strong>蛋白质，一掌心。</strong>手掌大小、手掌厚的一块肉，或者两个鸡蛋、一杯奶、一块豆腐，都算一份。</p>
+        <p><strong>主食，一拳。</strong>米饭、馒头、面条，一顿一拳。</p>
+        <p><strong>蔬菜，两捧。</strong>两只手捧起来那么多，生的熟的都算。</p>
+        <p>这个标准不精确，但足够用。它解决的是同一个问题：你不需要知道「65 克蛋白质」是多少，你只需要看一眼自己的饭盒。</p>
+        <p>一个更简单的判断：如果一天下来，你连一掌心蛋白质都没吃到，那问题不在「吃多少」，在「吃什么」。</p>
+
+        <h2><span class="h2n">2.3</span>食堂怎么选</h2>
+        <p>站在窗口前，按这个顺序看，三步：</p>
+        <ul class="steps">
+          <li><b>先找蛋白质</b><span>有没有肉、蛋、豆制品。有就先定它，别的往后放。</span></li>
+          <li><b>再找绿的</b><span>一份青菜，哪怕只有一样。没有绿叶的，就找冬瓜、茄子、豆角。</span></li>
+          <li><b>最后才是主食</b><span>米饭馒头负责管饱，但它们不负责让你撑到第四节课。</span></li>
+        </ul>
+        <p>两句补充。汤别当菜——大部分食堂的汤，盐和油比营养多。油炸的算肉，一周两三次没问题，天天吃就是另一笔账。</p>
+
+        <details>
+          <summary>今天窗口就这几样，怎么组合</summary>
+          <div class="d-body">
+            <p><strong>只有面或者粉：</strong>加一个蛋、一份青菜，汤别喝完。面能吃饱，但蛋白质和纤维都不够，两小时后又饿。</p>
+            <p><strong>只有盖饭：</strong>让阿姨少浇一点汁，米饭吃三分之二。汁里的油和盐，比你看出来的多。</p>
+            <p><strong>只有包子馒头：</strong>两个包子配一杯奶。全是碳水的话，第三节课一定饿，而且会困。</p>
+          </div>
+        </details>
+
+        <h2><span class="h2n">2.4</span>早饭，只有两种情况</h2>
+        <h3>食堂还开着</h3>
+        <p>一碗粥或者豆浆，一个鸡蛋，一份主食。五分钟能吃完，也够撑到第四节课。</p>
+        <h3>食堂已经关了</h3>
+        <p>柜子里的常温奶，一小袋即食燕麦，一小把坚果。三分钟，不用排队，不用出宿舍楼。</p>
+        <div class="note">
+          <b>早饭的意义不是「养生」。</b>是让你在第四节课的时候还听得进去。空着肚子上掉的那三节课，基本是白上的——这笔账，比一份早饭贵得多。
+        </div>
+
+        <h2><span class="h2n">2.5</span>喝水：靠「想起来」是没用的</h2>
+        <p>有个很常见的误会：以为不喝水是因为忘了。实际情况往往是——不渴，所以不想喝。</p>
+        <p>「记得多喝水」这种提醒，对前者无效，对后者也无效。有效的做法不是设目标（一天八杯），是设锚点：把喝水挂在某件一定会发生的事后面。</p>
+        <p>刷完牙，一杯。每节课下课回座位，喝一口。跑操回来，半杯。</p>
+        <p>水太淡喝不下去，加一片柠檬，或者一撮茶叶。不加糖。</p>
+        <p>够不够，看尿色：浅黄就行，深黄说明少了。</p>
+
+        <h2><span class="h2n">2.6</span>夜宵</h2>
+        <p>晚自习结束到熄灯，中间那段时间是最饿的。这不是意志力的问题——晚饭到那时候隔了五六个小时，胃早就空了。</p>
+        <p><strong>能吃的：</strong>牛奶、一小袋燕麦、一个水果、一小把坚果。</p>
+        <p><strong>尽量不选的：</strong>泡面（汤喝干净的话，一顿的盐就超了）、辣的东西、冰的。</p>
+        <p>时间上留余量：离熄灯至少两小时。第一章说睡前 3 小时不进食，这条在这儿一样成立——吃完立刻躺下，反酸是迟早的事。</p>
+
+        <h2><span class="h2n">2.7</span>零食的账</h2>
+        <p>零食不是不能吃。要看的只有一件事：它多久让你再饿一次。</p>
+        <p>一包饼干，二十分钟。一小把坚果加一杯奶，两小时。同样是一口东西，差别在这儿。</p>
+        <p>所以判断标准很简单：如果一样东西吃完，你半小时内还想再吃，它就不是食物，是味道。</p>
+
+        <p class="afterword">食堂给什么，你说了不算。但一顿里挑哪几样、吃多快、吃多少，是你说了算。</p>
+      </section>
+
+      <!-- ==================== 第三章 ==================== -->
+      <section data-chapter id="ch3">
+        <header class="ch-head">
+          <div class="ch-num">第 三 章</div>
+          <h1>睡：熄灯之后</h1>
+          <p class="lede">你不是不困。你是脑子还在跑，身体在等它停下来。</p>
+        </header>
+        <figure class="scene">
+          <p>十点五十，熄灯。你躺下，闭眼。</p>
+          <p>脑子里开始放今天下午那道没做出来的题，然后是明天的听写，然后是月考排名，然后是三周后回家要带什么。</p>
+          <p>十一点半，你翻了个身。十二点十分，你开始想：明天肯定起不来。</p>
+          <figcaption>熄灯之后的八十分钟</figcaption>
+        </figure>
+
+        <h2><span class="h2n">3.1</span>为什么越努力越睡不着</h2>
+        <p>睡眠是少数几件「努力反而做不到」的事。它不是一个动作，是一个结果——你松开控制之后，它自己会发生。</p>
+        <p>一旦你开始监控「我睡着了没有」，大脑就进入了警戒状态。它得盯着一个指标，就不能下班。</p>
+        <p>所以「我要赶紧睡着」和「千万别紧张」是同一种错误：都在要求自己直接关掉一个关不掉的东西。</p>
+        <p>躺下十几分钟才睡着是正常的。真正的问题不在那十几分钟，在你在这十几分钟里做的事。</p>
+
+        <h2><span class="h2n">3.2</span>放空是怎么放的</h2>
+        <p>有个细节值得说清楚：让人「不要想事情」通常不管用。因为「不要想」本身就是一个任务，大脑会一直检查「我做到了没有」。</p>
+        <p>有效的做法不是清空，是替换——给大脑一个足够无聊、又需要一点点注意力的活儿，让它没空自己找事。</p>
+        <ul class="steps">
+          <li><b>数呼吸</b><span>吸气数 1，呼气数 2，数到 10 从头来。走神了就从头数。走神不算失败，发现走神本身就是在练。</span></li>
+          <li><b>从脚开始放松</b><span>脚趾、脚踝、小腿、膝盖……一个部位一个部位往上，每个地方停两三秒。走到哪儿算哪儿，没走完就睡着了是好事。</span></li>
+          <li><b>想一个固定又无聊的画面</b><span>比如一条空走廊，灯一盏一盏亮着。每天想同一个，想久了它会变成开关。</span></li>
+        </ul>
+        <p>三个的共同点：都占用了「想事情」的那部分注意力，但占用得很少。</p>
+
+        <h2><span class="h2n">3.3</span>午睡：二十分钟，或者不睡</h2>
+        <p>午睡有个特别容易踩的坑：睡四十分钟。</p>
+        <p>二十分钟左右醒来，人是清楚的，起来就能用。超过半小时，身体开始往深睡走，这时候被铃声叫醒，会有二十分钟左右的昏沉——比不睡还难受。</p>
+        <p>所以要么二十分钟，要么睡满一个完整周期。宿舍里做不到后者，就老老实实定二十分钟。</p>
+        <p>还有姿势。趴桌上睡，压着胃（第一章说过反酸），压着手臂（醒来手麻），脖子还是折的。能靠椅背就靠椅背，垫件外套在桌上当枕头。</p>
+
+        <h2><span class="h2n">3.4</span>早上起不来，不是懒</h2>
+        <p>把三件事摆在一起看：早读六点半到教室；有的人通勤一个半小时，五点就得出门；晚上十二点才睡着。</p>
+        <p>《健康中国行动（2019—2030年）》给高中生的建议是每天睡够 8 小时。按上面这个作息算，缺口在两小时以上。</p>
+        <p>缺口摆在这儿，靠「早点睡」补不回来——不是不想早，是熄灯时间和作业量都不由你定。</p>
+        <p>能补的只有两处：中午那二十分钟；以及回家那两天，别把作息彻底翻过来。</p>
+
+        <h2><span class="h2n">3.5</span>宿舍里的三个物理变量</h2>
+        <p>影响睡眠的东西，一半在床上，一半在环境里。环境里能改的只有三样：</p>
+        <p><strong>光。</strong>眼罩，几块钱，比任何助眠方法都直接。没有眼罩，用外套袖子搭在眼睛上。</p>
+        <p><strong>声。</strong>耳塞，海绵的那种，捏细了塞进去，等它自己涨开。宿舍里总有人翻身、走动、说梦话。</p>
+        <p><strong>温度。</strong>被子别太厚。太热会让人夜里反复醒，而「醒过」这件事第二天是记不住的，只记得「没睡好」。</p>
+        <p>三样加起来不到三十块。它们的共同点是：不要求你改变任何习惯，只是把干扰拿掉。</p>
+
+        <h2><span class="h2n">3.6</span>睡前那一小时</h2>
+        <p>熄灯前那一小时，是全天最容易被浪费掉的一小时。没有手机，很多人就躺在床上等困。</p>
+        <p>这一小时做三件事，比多刷一套题划算：</p>
+        <ul class="steps">
+          <li><b>把明天要用的东西摆好</b><span>牙杯、毛巾、要穿的衣服，按用的顺序叠在一起。第二天早上能省下五分钟——第六章还会再讲一次。</span></li>
+          <li><b>泡脚，或者洗个热水澡</b><span>体温先升后降，降的那一段会让人想睡。这是热水澡真正起作用的机制，不是「放松心情」。</span></li>
+          <li><b>看几页闲书</b><span>不是课本，不是错题本，是那种看完不会让你接着想事情的书。看困了就放下，不用读完一章。</span></li>
+        </ul>
+        <p>反过来，这一小时里最好别做三件事：躺在床上想明天的安排（越想越清醒）；啃一道做不出来的难题（会带着情绪躺下）；和人聊让你上火的话题。</p>
+        <p>困意不是等来的，是攒出来的。白天见够光、动够，晚上把灯调暗，它自己会来。</p>
+
+        <h2><span class="h2n">3.7</span>三周回一次家，作息怎么不乱</h2>
+        <p>回家那两天最容易发生的事：熬到两三点，睡到中午。当时很爽。</p>
+        <p>代价不在那两天，在回学校之后的第三、四天——身体要重新调一遍，而那几天正好是状态最差的时候。</p>
+        <p>折中方案：允许自己晚一小时，别晚三小时。回家第一晚可以放开，第二晚往回拉。</p>
+
+        <p class="afterword">越想「赶紧睡」越睡不着。这不是你不努力，是脑子本来就不听这个命令。</p>
+      </section>
+
+      <!-- ==================== 第四章 ==================== -->
+      <section data-chapter id="ch4">
+        <header class="ch-head">
+          <div class="ch-num">第 四 章</div>
+          <h1>心：脑子停不下来</h1>
+          <p class="lede">「别紧张」这三个字，是所有建议里最没用的一条。</p>
+        </header>
+        <figure class="scene">
+          <p>考前十分钟，教室很安静，你听见自己的心跳。</p>
+          <p>你对自己说：别紧张。</p>
+          <p>然后更紧张了。</p>
+          <figcaption>每个考场都发生过的事</figcaption>
+        </figure>
+
+        <h2><span class="h2n">4.1</span>为什么「别紧张」没用</h2>
+        <p>紧张不是选择。手心出汗、心跳变快、想上厕所，这些在你「决定」之前就已经发生了——身体先动，脑子后到。</p>
+        <p>所以「别紧张」「放轻松」是无效指令：它们要求你直接关掉一个关不掉的东西。别人说没用，自己对自己说也没用。</p>
+        <p>能改的不是紧不紧张，是紧张之后你做什么。</p>
+
+        <h2><span class="h2n">4.2</span>盯着目标，反而更容易出错</h2>
+        <p>注意力只有一份。放在「我要考好」上，就没法同时放在「这道题在问什么」上。</p>
+        <p>前一种盯的是结果，结果你控制不了；后一种盯的是过程，过程你能控制。</p>
+        <p>一个具体动作：读题的时候，用笔把题干里的关键词圈出来。把「这道题我会不会」换成「这道题在问什么」。</p>
+        <p>这不是心理暗示。它做的就是一件事——把注意力从不控的地方，挪到可控的地方。</p>
+
+        <h2><span class="h2n">4.3</span>考前十分钟</h2>
+        <p><strong>4-6 呼吸。</strong>吸气 4 秒，呼气 6 秒，做 10 轮。呼气比吸气长，心跳会跟着慢下来。</p>
+        <p>坐着就能做，不用闭眼，不用离开座位，旁边的人看不出来。</p>
+        <p>手抖的话：握拳 5 秒再松开，重复三次。</p>
+        <p>这三件事不会让你不紧张。它们的作用是让你在紧张的状态下，把题做完。这就够了。</p>
+
+        <h2><span class="h2n">4.4</span>想家、失联、三周不回家</h2>
+        <p>封闭学校里最容易被忽略的消耗，不是学习强度，是没有出口。三周是一个很长的周期。</p>
+        <p>情绪的低点通常在第二周周末到第三周初。不是那时候出了什么事，是攒到了。</p>
+        <p>两件能做的。第一件：把「想回家」具体化。想的是家里的饭、自己的床，还是没人管你？说清楚之后，往往会发现需要的不是回家，是某一件很小的事——比如一顿有汤的饭。</p>
+        <p>第二件：给下次回家定一个确定的日期，记下来。不确定的等待最耗人。</p>
+        <p>这不是「调节心态」，是把一团模糊的难受，拆成一个能处理的东西。</p>
+
+        <h2><span class="h2n">4.5</span>什么时候该找人说话</h2>
+        <p>「心情不好就该看医生」这种说法等于没说。界线要具体，下面几条，中一条就值得开口：</p>
+        <ul class="steps">
+          <li><b>连续两周以上提不起劲</b><span>几乎每天都这样，而且已经影响到吃饭或者睡觉。</span></li>
+          <li><b>以前喜欢的事，现在完全没兴趣</b><span>不是「没时间做」，是「做了也没感觉」。</span></li>
+          <li><b>看不进去书，但成绩没有明显变化</b><span>注意力涣散持续两周以上，靠意志硬撑也回不来。</span></li>
+          <li><b>出现「活着没什么意思」这类念头</b><span>这一条不用等：直接找一个大人说，班主任、校医、家里任何人都行。</span></li>
+        </ul>
+        <p>说的时候不用说得完整。「我最近不太对」这一句就够对方接下去。</p>
+        <p>学校有心理老师。那不是「有问题才去」的地方。</p>
+
+        <p class="afterword">你不用一直很好。难受的时候找个人说一句就行，不用说得完整。</p>
+      </section>
+
+      <!-- ==================== 第五章 ==================== -->
+      <section data-chapter id="ch5">
+        <header class="ch-head">
+          <div class="ch-num">第 五 章</div>
+          <h1>动：你每天都在跑</h1>
+          <p class="lede">早晚各一次跑操。你的问题不是动得太少，是坐下来之后就不动了。</p>
+        </header>
+        <figure class="scene">
+          <p>第三节课下课，你站起来去接水。</p>
+          <p>走了两步，小腿发紧，腰后面有点酸。</p>
+          <p>接完水回座位，坐下。下一节还有四十五分钟。</p>
+          <figcaption>一个课间</figcaption>
+        </figure>
+
+        <h2><span class="h2n">5.1</span>先算一笔账</h2>
+        <p>跑操一天两次，一次两圈，一圈四百米，加起来是 1600 米。一周六天，接近一万米。</p>
+        <p>再加上每周一节的体育课。</p>
+        <p>所以「你该多运动」这句话对你是无效的——你不缺这个。你的运动量比大部分成年人都多，缺的东西在别处。</p>
+
+        <h2><span class="h2n">5.2</span>问题在剩下的 23 小时</h2>
+        <p>真正影响你下午状态的，不是一天总共动了多少，是<em>一次连续坐多久</em>。</p>
+        <p>一节课四十五分钟，课间十分钟——很多人的课间也是坐着的，只是换了个姿势。上午四节连起来，就是三个多小时几乎没动。</p>
+        <p>身体对「长时间不动」的反应，和对「运动量不足」的反应，是两套完全不同的机制。你补了后者，前者还在。</p>
+        <p>同一个道理也适用于周末：平时五天几乎不动，周末打两小时球，补的是「总量」，补不了「间隔」。周一坐下，身体该僵还是僵。</p>
+
+        <details>
+          <summary>「周末补运动」为什么补不回来</summary>
+          <div class="d-body">
+            <p>因为身体适应的是一天里活动怎么分布，不是一周的总账。连着坐五小时之后再猛动两小时，这两笔在身体里是分开记的。</p>
+            <p>更实际的问题是：周末那两小时之后，你多半会累到周一不想动，反而让接下来五天变得更静。</p>
+            <p>所以如果要加，加在每天，不加在周末。五分钟也算。</p>
+          </div>
+        </details>
+
+        <h2><span class="h2n">5.3</span>久坐具体伤了什么</h2>
+        <p><strong>消化。</strong>腹部一直压着，肠蠕动变慢。第一章里「三四天没排便」那一条，一半的原因是水，另一半是这个。</p>
+        <p><strong>腰背。</strong>坐着的时候，腰椎承受的压力比站着更大，而且是持续压着，中间没有间歇。腰酸不是姿势一时不好，是压得太久。</p>
+        <p><strong>注意力。</strong>连续坐过四十五分钟之后，后面那段时间的听课效率会掉一个台阶。你以为是自己走神，其实是身体在抗议。</p>
+        <p>这三条你都感受得到。只是很少有人把它们归到「坐太久」上。</p>
+
+        <h2><span class="h2n">5.4</span>课间三分钟</h2>
+        <p>不用换衣服，不用出汗，不用去操场。三件事：</p>
+        <p><strong>站起来。</strong>光是这一个动作，就已经打断了「连续坐」。</p>
+        <p><strong>走到窗边，看最远的东西。</strong>六十秒。这一条同时还解决第六章的眼睛问题。</p>
+        <p><strong>踮脚二十次，或者靠墙站一分钟。</strong>让小腿的肌肉收缩一下，血往上走，人就不那么昏。</p>
+        <p>教室在楼上的话，打水走楼梯，别等电梯。</p>
+
+        <h2><span class="h2n">5.5</span>体育课一周一节，怎么补</h2>
+        <p>不指望你额外锻炼。只指望你把已经有的那点动作用对：跑操的最后半圈别走；体育课别整节坐着。</p>
+        <p>真想加一点：睡前五分钟，二十个深蹲加三十秒平板支撑。不占地方，不出汗，不用换衣服，宿舍里就能做。</p>
+
+        <p class="afterword">跑不动就走两步，没关系。真正的问题是一整天都没站起来过。</p>
+      </section>
+
+      <!-- ==================== 第六章 ==================== -->
+      <section data-chapter id="ch6">
+        <header class="ch-head">
+          <div class="ch-num">第 六 章</div>
+          <h1>眼与身体：坐 14 小时之后</h1>
+          <p class="lede">教室里的灯是够亮的。不够的是你能控制的那部分。</p>
+        </header>
+        <figure class="scene">
+          <p>早上六点，宿舍九个人排队洗漱。轮到你的时候，离集合还有四分钟。</p>
+          <p>你没洗头，把头发扎起来就往外跑。</p>
+          <p>晚上熄灯后摸黑换了内衣，扔进盆里，明天再说。</p>
+          <figcaption>九人间里的十五分钟</figcaption>
+        </figure>
+
+        <h2><span class="h2n">6.1</span>近视不只是「看不清」</h2>
+        <p>度数涨得最快的那几年，正好是坐得最久、看近处最多的这几年。这不是巧合。</p>
+        <p>600 度以上算高度近视。它不只是镜片厚一点：视网膜脱落、青光眼、黄斑病变的风险都会跟着上去，而且这些不是「戴眼镜就能解决」的问题。</p>
+        <p>所以护眼的目标不是「不戴眼镜」——大概率做不到。是<em>别让它一直涨</em>。</p>
+
+        <h2><span class="h2n">6.2</span>20-20-20 的教室版</h2>
+        <p>标准做法是：每 20 分钟，看 6 米外的东西 20 秒——这是美国眼科学会给的建议。</p>
+        <p>教室里做不到每 20 分钟一次。那就做能做的版本：每节课下课，抬头看窗外最远的东西——树、楼、天，六十秒。</p>
+        <p>关键是「远」和「离开近处」，不是「闭眼休息」。闭眼只让眼睛不工作，看远才让睫状肌松开。</p>
+
+        <h2><span class="h2n">6.3</span>眼保健操不做了，替代是什么</h2>
+        <p>眼保健操真正的作用不是「治近视」，是每天两次强制让眼睛离开书本、活动眼周。它有用，但它有用的部分，是那个「离开」。</p>
+        <p>所以替代方案的核心是同一件事。三个，都在座位上能做：</p>
+        <p><strong>下课看远 60 秒。</strong>见上一条。</p>
+        <p><strong>用力眨眼十次。</strong>眼睛干、涩、发胀的时候最有效。很多人眨眼只眨一半，睑板腺的油出不来，泪液蒸发得快。</p>
+        <p><strong>手掌搓热，虚扣在眼睛上 30 秒。</strong>不揉、不压，就是遮光和一点温度。</p>
+
+        <h2><span class="h2n">6.4</span>九人间，早晨十五分钟</h2>
+        <p>排队是固定的，能改的只有顺序。</p>
+        <p>头天晚上把东西摆好：牙杯、毛巾、今天要穿的衣服，按用的顺序叠在一起。这一步能省出五分钟，而五分钟在这个场景里就是全部。</p>
+        <p>洗漱只做必须的三件：牙、脸、头发。头发油就扎起来，不用天天洗。</p>
+        <p>洗头放到晚上。既然想洗每天都能洗，晚上时间宽得多。</p>
+
+        <h2><span class="h2n">6.5</span>经期：疼到什么程度算正常</h2>
+        <p>疼是正常的，但「正常」有边界。</p>
+        <p>常见的：第一天小腹坠痛、腰酸、没力气，一两天缓解。这是前列腺素引起的子宫收缩，不是你体质差。</p>
+        <p><strong>能做的：</strong>热水袋或者暖贴（学校有热水）；少碰冰的；疼得厉害的那半天，跑操可以请假——这不是娇气，是身体确实在收缩。</p>
+        <p><strong>该去查的：</strong></p>
+        <ul>
+          <li>疼到必须请假，吃止痛药也不管用</li>
+          <li>一次比一次疼（可能是子宫内膜异位，这个病在青少年里被漏诊得很多）</li>
+          <li>周期完全乱：两三个月不来，或者一来十几天</li>
+          <li>量突然特别大</li>
+        </ul>
+        <p>关于止痛药：布洛芬这一类，<em>在疼起来之前吃</em>比疼到受不了再吃有效。胃不好的饭后吃，别空腹。</p>
+        <p>红糖姜水能让人舒服一点——热的东西本来就能缓解痉挛。但它不解决原因，别把它当成方案。</p>
+
+        <h2><span class="h2n">6.6</span>洗头、内衣、脚</h2>
+        <p><strong>洗头。</strong>一周两三次够了，油性发质可以天天。湿着睡不好，不是迷信——头皮受凉血管收缩，第二天容易头痛。</p>
+        <p><strong>内衣。</strong>每天换，手洗，别和外衣一起洗。能晒就晒，阴干差一截。</p>
+        <p><strong>脚。</strong>洗完把脚趾缝擦干。鞋两双轮着穿——一双连穿一周，里面能长什么，你不会想知道。</p>
+
+        <p class="afterword">身体是你自己的，用坏了没地方换。</p>
+      </section>
+
+      <!-- ==================== 第七章 ==================== -->
+      <section data-chapter id="ch7">
+        <header class="ch-head">
+          <div class="ch-num">第 七 章</div>
+          <h1>生病了，去哪儿</h1>
+          <p class="lede">「药不管用」不是原因，是算完账之后，说给自己听的理由。</p>
+        </header>
+        <figure class="scene">
+          <p>发烧到 38 度，你从抽屉里翻出上个月剩的感冒药，吃了两片。</p>
+          <p>同桌说：别去，那儿的药不管用。</p>
+          <p>你问她去过吗。她说没有，都这么说。</p>
+          <p>你想了想，也是。</p>
+          <figcaption>几乎每个班都发生过的对话</figcaption>
+        </figure>
+
+        <h2><span class="h2n">7.1</span>不去，是一笔算过的账</h2>
+        <p>先把这件事说破：「药不管用」通常不是先去了解、再下的判断。它是决定已经做完之后，补上的一句解释。</p>
+        <p>真实的账是这样的。去一趟的成本是确定的：跟老师请假、下楼、排队、把哪儿难受说清楚、可能落掉一节课，有的学校还要通知家里。而收益是不确定的：你也不知道去了能不能好。</p>
+        <p>确定的成本，换一个不确定的收益。任何人算这笔账，答案都是不去。这跟勇敢不勇敢没关系，是账算得没错。</p>
+        <p>那「听说不管用」是怎么变成共识的？有个细节值得看：<em>说这话的人，多半没去过</em>。</p>
+        <p>而这条消息在传的时候，天生是偏的。去了、好了的人，不会特意回来说一句「其实有用」；去了、没立刻好的人，一定会说。你听到的样本，从源头就是斜的。</p>
+        <p>当然有一半是真的：医务室能给的多是对症的常用药，重的它处理不了，只能往外转。这点没冤枉它。但「吃了第二天没好」不等于药没用——感冒本来就要一周。药管的是难受，不管好得快。</p>
+        <p>所以真正的问题不在「该不该去」，在这笔账里有一项被漏掉了：<strong>拖</strong>。多数小毛病会自己好，但有一些不会。而拖过某个点，代价会从「一节课」跳到「一周」。</p>
+        <p>还有一项被低估了：医务室真正值钱的地方不是给药，是判断你到底要不要出去。这件事它比你有经验。</p>
+        <p>于是问题可以换个问法：不是「值不值得去」，是「这一次，是不是那种会自己好的」。</p>
+
+        <h2><span class="h2n">7.2</span>值得跑一趟的情况</h2>
+        <p>外伤：扭伤、划伤、烫伤。</p>
+        <p>发烧：38.5 以上，或者低烧持续两天。</p>
+        <p>急性腹泻、呕吐。</p>
+        <p>过敏：起疹子、痒、局部肿。</p>
+        <p>任何疼到影响上课的疼痛。</p>
+        <p>这几类有共同点：要么当场就能处理，要么处理不了也得赶紧往外转。都属于「去了不亏」——而且都是「不会自己好」的那种。</p>
+
+        <h2><span class="h2n">7.3</span>去了怎么说</h2>
+        <p>三句话，按这个顺序说：</p>
+        <ul class="steps">
+          <li><b>什么时候开始的</b><span>「前天晚上」「今天早自习」。</span></li>
+          <li><b>什么感觉</b><span>「是胀，不是疼」「一阵一阵的」「按下去更疼」。形容得越具体，越省时间。</span></li>
+          <li><b>有没有变重</b><span>「昨天还好，今天开始吐」。这一句决定了对方紧不紧张。</span></li>
+        </ul>
+        <p>如果你记过——什么时候开始的、吃了什么、疼了多久——直接拿出来。它比「我难受」有用得多。</p>
+
+        <h2><span class="h2n">7.4</span>抽屉里该有什么</h2>
+        <p>既然多数时候是自己扛，那手上有什么就很重要。一份最基本的清单：</p>
+
+        <div class="spec">
+          <div class="spec-head"><span>通用名</span><span>用来对付</span><span>注意</span></div>
+          <div class="spec-row"><span class="c1">对乙酰氨基酚</span><span class="c2" data-k="用来对付">发烧、头痛</span><span class="c3" data-k="注意">很多复方感冒药里已经有它，别叠加着吃</span></div>
+          <div class="spec-row"><span class="c1">布洛芬</span><span class="c2" data-k="用来对付">痛经、头痛、牙痛</span><span class="c3" data-k="注意">别空腹吃；胃不好的饭后吃</span></div>
+          <div class="spec-row"><span class="c1">蒙脱石散</span><span class="c2" data-k="用来对付">急性腹泻</span><span class="c3" data-k="注意">和其他药隔开两小时，它会吸附别人</span></div>
+          <div class="spec-row"><span class="c1">口服补液盐</span><span class="c2" data-k="用来对付">腹泻、呕吐后补水</span><span class="c3" data-k="注意">别用运动饮料代替，糖和盐的比例不对</span></div>
+          <div class="spec-row"><span class="c1">碘伏棉签、创可贴</span><span class="c2" data-k="用来对付">小伤口</span><span class="c3" data-k="注意">伤口脏要先冲洗，再消毒</span></div>
+          <div class="spec-row"><span class="c1">体温计</span><span class="c2" data-k="用来对付">判断要不要报</span><span class="c3" data-k="注意">电子的就够，别凭手感猜</span></div>
+        </div>
+
+        <div class="note">
+          <b>剂量这里一个都不给。</b>同一个药名，片剂和缓释胶囊的用法就不一样，年龄体重也影响用量——这种事只能看说明书或者问医生。这里能做的是告诉你「它大概是干什么的」，以及「什么时候别乱搭」。
+        </div>
+        <p>另外：每年开学清一次抽屉，过期的扔掉。药过期不是「效果差点」，是有的会分解出不该有的东西。</p>
+
+        <h2><span class="h2n">7.5</span>红旗症状</h2>
+        <p>比第一章那张更全。出现任何一条，不用再观察。</p>
+
+        <div class="flags">
+          <h3>这九条，一条都不用过夜</h3>
+          <ul>
+            <li>大便发黑、像柏油，或者呕出血</li>
+            <li>肚子持续剧痛超过 6 小时，而且越来越重</li>
+            <li>发烧超过 39℃，或者发烧三天不退</li>
+            <li>明显脱水：口干、尿少、站起来发晕</li>
+            <li>呼吸困难、胸闷、心跳一直很快</li>
+            <li>意识模糊，叫不太应</li>
+            <li>剧烈头痛，伴呕吐或者脖子发硬</li>
+            <li>过敏时嘴唇、喉咙肿起来，喘不上气</li>
+            <li>伤口红肿热痛在扩散，或者有脓</li>
+          </ul>
+          <p>这几条不代表一定很严重。但它们都过了「自己扛一扛」的界限，需要有人看一眼。</p>
+        </div>
+
+        <h2><span class="h2n">7.6</span>什么时候该请假</h2>
+        <p>硬扛一节课，是意志问题。硬扛一天，是判断问题。</p>
+        <p>该请的情况：发烧、呕吐腹泻、疼到没法集中注意力、有传染性的（流感、诺如）。</p>
+        <p>最后一条值得多说一句：带病上课不是勤奋。它把一个班拖下水，也让你自己好得更慢——这一天的课没听进去，后面三天还得补。</p>
+
+        <p class="afterword">能忍不算本事。忍到撑不住那天，落下的课更多。</p>
+      </section>
+
+      <footer class="foot">
+        <p><strong>高中生身体健康指北</strong> · 写给高中生的身体使用说明</p>
+        <p>本册为健康科普，不构成诊疗建议或用药指导。所有药物请遵说明书或医嘱使用；持续不适应及时就医。</p>
+        <p>文中场景取自真实校园生活，已作匿名化处理，不指向任何具体个人或学校。</p>
+        <p class="ver">v0.7 · 2026-10-31</p>
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="head">
+    <span>目 录</span>
+    <button type="button" id="closeToc" aria-label="关闭目录">×</button>
+  </div>
+  <ul class="nav" id="navListMobile"></ul>
+  <button type="button" class="print-btn" id="printBtn2">打印 / 存为 PDF</button>
+</div>
+
+<script>
+(function () {
+  var secs = Array.prototype.slice.call(document.querySelectorAll('[data-chapter]'));
+  var ids = secs.map(function (s) { return s.id; });
+  var navA = Array.prototype.slice.call(document.querySelectorAll('[data-target]'));
+  var titles = {};
+  secs.forEach(function (s) {
+    var h = s.querySelector('h1');
+    titles[s.id] = h ? h.textContent.trim() : '';
+  });
+
+  var mbarTitle = document.getElementById('mbarTitle');
+  var sheet = document.getElementById('sheet');
+  var navMobile = document.getElementById('navListMobile');
+
+  /* 移动端目录：复制一份 */
+  navMobile.innerHTML = document.getElementById('navList').innerHTML;
+
+  function activate(id, opts) {
+    if (ids.indexOf(id) === -1) id = ids[0];
+    secs.forEach(function (s) { s.hidden = (s.id !== id); });
+    navA.forEach(function (a) {
+      var on = a.getAttribute('data-target') === id;
+      a.classList.toggle('is-active', on);
+      if (on) { a.setAttribute('aria-current', 'page'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+    mbarTitle.textContent = titles[id] || '高中生身体健康指北';
+    if (document.documentElement.getAttribute('data-print') !== 'on') {
+      window.scrollTo(0, 0);
+      requestAnimationFrame(function () { window.scrollTo(0, 0); });
+    }
+    if (opts && opts.focus !== false) {
+      document.title = (titles[id] ? titles[id] + ' · ' : '') + '高中生身体健康指北';
+    }
+  }
+
+  function go(id) {
+    if (location.hash.slice(1) === id) { activate(id); }
+    else { location.hash = id; }
+    closeSheet();
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-target]') : null;
+    if (!a) return;
+    e.preventDefault();
+    go(a.getAttribute('data-target'));
+  });
+
+  window.addEventListener('hashchange', function () {
+    activate(location.hash.slice(1));
+  });
+
+  function openSheet() { sheet.classList.add('on'); sheet.setAttribute('aria-hidden', 'false'); }
+  function closeSheet() { sheet.classList.remove('on'); sheet.setAttribute('aria-hidden', 'true'); }
+
+  document.getElementById('openToc').addEventListener('click', openSheet);
+  document.getElementById('closeToc').addEventListener('click', closeSheet);
+
+  function doPrint() {
+    document.documentElement.setAttribute('data-print', 'on');
+    secs.forEach(function (s) { s.hidden = false; });
+    var ds = document.querySelectorAll('details');
+    ds.forEach(function (d) { if (!d.open) { d.dataset.wasClosed = '1'; d.open = true; } });
+    window.print();
+  }
+
+  document.getElementById('printBtn').addEventListener('click', doPrint);
+  document.getElementById('printBtn2').addEventListener('click', doPrint);
+
+  window.addEventListener('afterprint', function () {
+    document.documentElement.removeAttribute('data-print');
+    document.querySelectorAll('details').forEach(function (d) {
+      if (d.dataset.wasClosed) { d.open = false; delete d.dataset.wasClosed; }
+    });
+    activate(location.hash.slice(1) || ids[0], { focus: false });
+  });
+
+  /* 打印前（Ctrl+P 直接打印的路径）也要展开 */
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('details').forEach(function (d) { d.open = true; });
+    secs.forEach(function (s) { s.hidden = false; });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSheet();
+  });
+
+  activate(location.hash.slice(1) || ids[0], { focus: false });
+
+  /* 带 #ch3 直接打开时，浏览器会自动滚到锚点，把标题顶进固定栏底下 */
+  function resetTop() { window.scrollTo(0, 0); }
+  resetTop();
+  window.addEventListener('load', function () {
+    resetTop();
+    requestAnimationFrame(resetTop);
+  });
+  window.addEventListener('pageshow', resetTop);
+})();
+</script>
+</body>
+</html>
