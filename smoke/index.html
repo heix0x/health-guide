@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>一根烟的事</title>
+<meta name="description" content="关于吸烟、二手烟、三手烟，以及那句「关你什么事」。一本可以查、可以打印的烟草科普。">
+<meta name="theme-color" content="#FAF7F2">
+<style>
+
+:root{
+  --paper:#FAF7F2;
+  --paper-2:#F3EDE3;
+  --card:#FFFDF9;
+  --ink:#2A2724;
+  --ink-2:#59534B;
+  --ink-3:#8C8478;
+  --line:#E5DDCF;
+  --line-2:#EFE9DE;
+  --accent:#B85F3C;
+  --accent-2:#F5E6DC;
+  --green:#3F5D4E;
+  --green-2:#E8EEE8;
+  --radius:14px;
+  --maxw:700px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.85;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--accent-2);color:var(--ink)}
+
+/* ---------- 布局 ---------- */
+.shell{display:grid;grid-template-columns:266px minmax(0,1fr)}
+
+/* ---------- 侧栏 ---------- */
+.toc{
+  position:sticky;top:0;height:100vh;
+  padding:38px 22px 26px;
+  background:var(--paper-2);
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.brand{padding:0 6px 26px;border-bottom:1px solid var(--line)}
+.brand .mark{
+  font-size:11px;letter-spacing:.28em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:10px;
+}
+.brand h1{
+  font-size:19px;line-height:1.4;margin:0 0 8px;
+  letter-spacing:.02em;font-weight:700;
+}
+.brand p{margin:0;font-size:12.5px;line-height:1.7;color:var(--ink-3)}
+
+.nav{list-style:none;margin:18px 0 0;padding:0}
+.nav li{margin:0}
+.nav a{
+  display:flex;gap:11px;align-items:baseline;
+  padding:9px 10px;margin-bottom:2px;
+  border:0;border-radius:9px;
+  text-decoration:none;color:var(--ink-2);
+  font-size:14.5px;line-height:1.5;
+  transition:background .18s ease,color .18s ease;
+}
+.nav a:hover{background:rgba(184,95,60,.07);color:var(--ink)}
+.nav a .n{
+  font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;
+  min-width:16px;letter-spacing:.04em;
+}
+.nav a.is-active{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(42,39,36,.05)}
+.nav a.is-active .n{color:var(--accent)}
+
+.toc-foot{padding-top:16px;border-top:1px solid var(--line);margin-top:12px}
+.print-btn{
+  width:100%;padding:11px 12px;border:1px solid var(--accent);
+  background:var(--accent);color:#FFF9F4;border-radius:9px;
+  font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.03em;
+  cursor:pointer;transition:background .18s ease;
+}
+.print-btn:hover{background:#A24F2F}
+.print-btn.is-ghost{
+  margin-top:8px;background:transparent;border-color:var(--line);
+  color:var(--ink-2);font-weight:400;letter-spacing:0;text-align:left;
+  line-height:1.35;padding:9px 12px;transition:border-color .18s ease,color .18s ease;
+}
+.print-btn.is-ghost:hover{background:transparent;border-color:var(--accent);color:var(--accent)}
+.print-btn .cur{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;letter-spacing:.02em}
+.toc-foot p{font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.6}
+
+/* ---------- 浮层提示 ---------- */
+/* 只在「打印之后」用：写盘发生在浏览器进程里，页面拿不到进度，
+   所以不做进度条，只把「等两三秒」这句话在对话框关闭的那一刻说出来。 */
+.toast{
+  position:fixed;left:50%;bottom:26px;z-index:80;
+  transform:translate(-50%,12px);
+  max-width:min(90vw,440px);padding:12px 18px;border-radius:12px;
+  background:#2C2823;color:#F7F2EA;
+  font-size:13.5px;line-height:1.65;
+  box-shadow:0 12px 34px rgba(0,0,0,.22);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- 正文 ---------- */
+main{min-width:0}
+.page{max-width:var(--maxw);margin:0 auto;padding:84px 32px 120px}
+[data-chapter]{animation:rise .34s ease both;scroll-margin-top:70px}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+.ch-head{margin-bottom:44px}
+.ch-num{
+  font-size:12px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:16px;font-variant-numeric:tabular-nums;
+}
+.ch-head h1{
+  font-size:34px;line-height:1.35;margin:0 0 18px;
+  letter-spacing:-.01em;font-weight:700;
+}
+.lede{
+  font-size:17px;line-height:1.8;color:var(--ink-2);margin:0;
+  padding-left:16px;border-left:2px solid var(--accent-2);
+}
+
+h2{
+  font-size:21px;line-height:1.5;margin:64px 0 20px;
+  font-weight:700;letter-spacing:.005em;
+  padding-bottom:12px;border-bottom:1px solid var(--line-2);
+}
+h2 .h2n{color:var(--accent);font-size:13px;letter-spacing:.16em;margin-right:10px;vertical-align:2px}
+h3{font-size:16.5px;margin:32px 0 10px;font-weight:700}
+p{margin:0 0 18px}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(184,95,60,.3)}
+strong{font-weight:700}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent-2) 62%);padding:0 1px}
+
+/* ---------- 场景卡 ---------- */
+.scene{
+  margin:0 0 34px;padding:24px 26px 18px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:0 1px 3px rgba(42,39,36,.03);
+}
+.scene p{
+  margin:0 0 12px;font-size:15.5px;line-height:2;color:var(--ink);
+}
+.scene figcaption{
+  font-size:12px;color:var(--ink-3);letter-spacing:.04em;
+  padding-top:10px;border-top:1px dashed var(--line);text-align:right;
+}
+
+/* ---------- 摘引 ---------- */
+.pull{
+  margin:26px 0;padding:2px 0 2px 20px;
+  border-left:2px solid var(--accent);
+  font-size:17px;line-height:1.95;color:var(--ink);
+}
+.pull p{margin:0}
+
+/* ---------- 速查卡 ---------- */
+.sx-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:26px 0 30px}
+.sx{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 17px 14px;
+}
+.sx .sx-t{
+  font-size:15px;font-weight:700;margin:0 0 12px;color:var(--ink);
+  line-height:1.5;
+}
+.sx dl{margin:0;font-size:13.5px;line-height:1.7}
+.sx dt{
+  color:var(--ink-3);font-size:11px;letter-spacing:.1em;
+  margin-top:9px;margin-bottom:2px;
+}
+.sx dd{margin:0;color:var(--ink-2)}
+.sx dd.warn{color:var(--accent);font-weight:600}
+
+/* ---------- 红旗 ---------- */
+.flags{
+  margin:30px 0;padding:22px 24px;
+  background:linear-gradient(180deg,#FDF2EC,#FBF6F1);
+  border:1px solid #EDCFC0;border-left:3px solid var(--accent);
+  border-radius:10px;
+}
+.flags h3{margin:0 0 12px;font-size:15px;color:var(--accent);letter-spacing:.02em}
+.flags ul{margin:0;padding-left:18px;font-size:15px;line-height:1.95;color:var(--ink)}
+.flags li::marker{color:var(--accent)}
+.flags p{margin:12px 0 0;font-size:13.5px;color:var(--ink-3);line-height:1.7}
+
+/* ---------- 表格：账本 / 清单 ----------
+   用真 table 而不是 grid 拼的假表。打印跨页时 thead 会自动重复到下一页，
+   否则第二页那几行没有表头，读者分不清哪一栏是哪一栏。 */
+.tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin:24px 0 30px}
+.tbl th{
+  text-align:left;vertical-align:bottom;
+  font-size:11px;font-weight:400;letter-spacing:.12em;color:var(--ink-3);
+  padding:0 6px 9px;border-bottom:1px solid var(--line);
+}
+.tbl td{
+  padding:13px 6px;border-bottom:1px solid var(--line-2);
+  font-size:14px;line-height:1.7;vertical-align:top;
+}
+.tbl tr{break-inside:avoid;page-break-inside:avoid}
+
+.ledger col.w1{width:36%}
+.ledger col.w2{width:30%}
+.ledger col.w3{width:34%}
+.ledger .what{font-weight:600;color:var(--ink)}
+.ledger .soon{color:var(--ink-2)}
+.ledger .long{color:var(--accent)}
+
+.spec col.w1{width:19%}
+.spec col.w2{width:32%}
+.spec col.w3{width:49%}
+.spec td.c1{font-weight:600;color:var(--ink)}
+.spec td.c2{color:var(--ink-2)}
+.spec td.c3{color:var(--ink-2);font-size:13.5px}
+
+/* ---------- 步骤 ---------- */
+.steps{list-style:none;margin:24px 0 28px;padding:0;counter-reset:s}
+.steps li{
+  counter-increment:s;position:relative;
+  padding:14px 0 14px 46px;border-bottom:1px solid var(--line-2);
+  font-size:15.5px;line-height:1.8;
+}
+.steps li:last-child{border-bottom:0}
+.steps li::before{
+  content:counter(s);position:absolute;left:0;top:15px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--green-2);color:#31493C;
+  font-size:12.5px;font-weight:700;display:grid;place-items:center;
+}
+.steps b{display:block;font-weight:700;margin-bottom:2px}
+.steps span{color:var(--ink-2)}
+
+/* ---------- 章末结语 ---------- */
+.afterword{
+  margin:66px 0 0;
+  font-size:17.5px;line-height:2.05;color:var(--ink-2);letter-spacing:.01em;
+}
+.afterword::before{
+  content:"";display:block;width:34px;height:2px;
+  background:var(--accent);opacity:.5;margin-bottom:20px;
+}
+
+/* ---------- 提示 ---------- */
+.note{
+  margin:26px 0;padding:16px 18px;
+  background:var(--paper-2);border-radius:10px;
+  font-size:14px;line-height:1.8;color:var(--ink-2);
+}
+.note b{color:var(--ink)}
+
+details{
+  margin:22px 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--card);overflow:hidden;
+}
+summary{
+  padding:14px 18px;cursor:pointer;font-size:14.5px;font-weight:600;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  color:var(--ink-2);
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--accent);font-size:15px;font-weight:400}
+details[open] summary::after{content:"－"}
+details[open] summary{border-bottom:1px solid var(--line-2)}
+details .d-body{padding:16px 18px 6px;font-size:14.5px;line-height:1.85;color:var(--ink-2)}
+
+/* ---------- 封面 ---------- */
+.cover{padding-top:64px}
+.cover .kicker{
+  font-size:11.5px;letter-spacing:.3em;color:var(--accent);margin-bottom:26px;
+}
+.cover h1{
+  font-size:clamp(38px,6.4vw,58px);line-height:1.22;margin:0 0 22px;
+  letter-spacing:-.02em;font-weight:700;
+}
+.cover .sub{
+  font-size:17px;color:var(--ink-2);margin:0 0 44px;line-height:1.9;
+}
+.cover .rule{height:1px;background:var(--line);margin:0 0 34px}
+.how{list-style:none;margin:0;padding:0}
+.how li{
+  padding:16px 0;border-bottom:1px solid var(--line-2);
+  display:grid;grid-template-columns:88px 1fr;gap:18px;
+  font-size:15px;line-height:1.8;
+}
+.how li:last-child{border-bottom:0}
+.how .k{font-size:12px;letter-spacing:.1em;color:var(--ink-3);padding-top:3px}
+.how .v{color:var(--ink-2)}
+.how .v b{color:var(--ink)}
+
+/* ---------- 提纲 ---------- */
+.outline{list-style:none;margin:26px 0;padding:0}
+.outline li{
+  padding:15px 0;border-bottom:1px solid var(--line-2);
+  font-size:15px;line-height:1.8;
+}
+.outline li:last-child{border-bottom:0}
+.outline b{display:block;font-weight:700;margin-bottom:3px}
+.outline a{border-bottom:0}
+.outline span{color:var(--ink-2);font-size:14px}
+
+/* ---------- 纸面索引 ---------- */
+/* 网页靠侧栏跳转，纸上只有页码。这一列只在打印时出现，屏幕上由左侧目录代劳 */
+.idx li{display:grid;grid-template-columns:1fr auto;column-gap:18px;align-items:baseline}
+.idx li b{grid-column:1;grid-row:1}
+.idx li span{grid-column:1;grid-row:2}
+.idx .pg{
+  grid-column:2;grid-row:1 / span 2;align-self:center;
+  font-style:normal;font-size:13px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;letter-spacing:.04em;
+  min-width:2.4em;text-align:right;
+}
+@media screen{.idx .pg{display:none}}
+
+.stub{
+  padding:20px 22px;background:var(--paper-2);border-radius:12px;
+  font-size:14px;color:var(--ink-2);line-height:1.8;
+}
+.stub b{color:var(--accent)}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  margin-top:80px;padding-top:26px;border-top:1px solid var(--line);
+  font-size:12.5px;line-height:1.9;color:var(--ink-3);
+}
+.foot p{margin:0 0 8px}
+.foot .ver{
+  margin-top:18px;padding-top:12px;border-top:1px solid var(--line-2);
+  font-size:11.5px;letter-spacing:.08em;color:var(--ink-3);
+}
+
+/* ---------- 移动端 ---------- */
+.mbar{display:none}
+.sheet{display:none}
+
+@media screen and (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .toc{display:none}
+  .page{padding:calc(58px + env(safe-area-inset-top)) 22px 90px}
+  .ch-head h1{font-size:27px}
+  h2{font-size:19px;margin-top:52px}
+  .sx-grid{grid-template-columns:1fr}
+  /* 表在窄屏上摊成卡片：表头藏掉，每格用 data-k 自己报栏名 */
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block}
+  .tbl thead{display:none}
+  .tbl col{display:none}
+  .tbl{margin:22px 0}
+  .tbl tr{padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .tbl tr:last-child{border-bottom:0}
+  .tbl td{padding:2px 0;border-bottom:0}
+  .tbl td::before{
+    content:attr(data-k)"　";font-size:11px;letter-spacing:.08em;color:var(--ink-3);
+  }
+  .tbl td.c1::before,.tbl td.what::before{content:""}
+  .ledger .what{font-size:15px;margin-bottom:2px}
+  .how li{grid-template-columns:1fr;gap:2px}
+  .how .k{padding-top:0}
+  .cover{padding-top:26px}
+
+  .mbar{
+    display:flex;position:fixed;top:0;left:0;right:0;z-index:60;
+    height:calc(56px + env(safe-area-inset-top));
+    padding:env(safe-area-inset-top) 18px 0;
+    align-items:center;justify-content:space-between;
+    background:rgba(250,247,242,.92);
+    backdrop-filter:saturate(1.6) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .mbar .t{font-size:14px;font-weight:700;letter-spacing:.01em}
+  .mbar button{
+    border:1px solid var(--line);background:var(--card);
+    border-radius:8px;padding:7px 13px;font-family:inherit;
+    font-size:13px;color:var(--ink-2);cursor:pointer;
+  }
+  .sheet{
+    display:block;position:fixed;inset:0;z-index:70;
+    background:var(--paper);padding:26px 22px 40px;
+    overflow-y:auto;transform:translateY(12px);
+    opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;
+  }
+  .sheet.on{opacity:1;transform:none;pointer-events:auto}
+  .sheet .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .sheet .head span{font-size:12px;letter-spacing:.24em;color:var(--accent)}
+  .sheet .head button{
+    border:0;background:none;font-family:inherit;font-size:26px;
+    color:var(--ink-3);cursor:pointer;line-height:1;padding:4px 8px;
+  }
+  .sheet .nav a{font-size:16px;padding:14px 10px}
+  .sheet .print-btn{margin-top:26px}
+  .sheet .print-btn.is-ghost{margin-top:8px}
+  .sheet .sheet-tip{margin:14px 0 0;font-size:12px;line-height:1.65;color:var(--ink-3)}
+}
+
+@media screen and (max-width:420px){
+  body{font-size:16.5px}
+  .page{padding-left:18px;padding-right:18px}
+  .cover h1{font-size:34px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---------- 打印 ---------- */
+@media print{
+  :root{--paper:#fff;--paper-2:#fff;--card:#fff}
+  body{font-size:10pt;line-height:1.72;background:#fff}
+  .toc,.mbar,.sheet,.print-btn,.nav,.toast{display:none!important}
+  .shell{display:block}
+  .page{max-width:none;padding:0}
+  .cover{padding-top:0}
+  .cover p{margin:0 0 7px}
+  .cover h2{margin:18px 0 10px}
+  .cover .how li{padding:8px 0;break-inside:avoid}
+  .cover .outline li{padding:9px 0;break-inside:avoid}
+  .pull{margin:14px 0;padding:2px 0 2px 16px}
+  p{margin:0 0 9px}
+  h2{margin:26px 0 12px;font-size:13pt;padding-bottom:8px}
+  h3{margin:16px 0 6px;font-size:11pt}
+  .ch-head{margin-bottom:22px}
+  .scene{padding:16px 18px 12px;margin-bottom:20px}
+  .scene p{margin-bottom:8px;line-height:1.8}
+  .sx{padding:12px 13px 10px}
+  .sx-grid{gap:9px;margin:14px 0 18px}
+  .sx .sx-t{margin-bottom:8px;font-size:10.5pt}
+  .sx dt{margin-top:6px}
+  .flags{padding:14px 16px;margin:18px 0}
+  .led{padding:9px 4px}
+  .tbl td{padding:8px 5px}
+  .steps li{padding:8px 0 8px 40px}
+  .afterword{margin-top:20px;font-size:13pt;break-before:avoid;page-break-before:avoid}
+  .note{margin:12px 0;padding:10px 13px}
+  details{margin:14px 0}
+  .foot{margin-top:22px;padding-top:14px;break-inside:avoid;page-break-inside:avoid}
+  [data-chapter]{display:block!important;animation:none!important;opacity:1!important;transform:none!important;break-before:page;page-break-before:always}
+  [data-chapter]:first-of-type{break-before:auto;page-break-before:auto}
+  /* 单章打印：只留选中的那一章，且不留首张空白页 */
+  html[data-print-scope] [data-chapter]:not([data-print-on]){display:none!important}
+  html[data-print-scope] [data-chapter][data-print-first]{break-before:auto!important;page-break-before:auto!important}
+  /* 章末那行「第 X 章 · 本册为健康科普」原来用 ::after 生成，问题在于它是一块正文流里的
+     内容：一页装不下时，它会独自掉到下一页，变成一张只有一行的孤页。改成 @page 的跑马脚
+     （书名 + 页码）之后，页脚永远在白边里，正文排版不再被它牵连。
+     免责声明仍在封面与全册末页各有一处。 */
+  /* 单章打印时把四行版权页整个收掉——它在这儿只值一行，多出来的会把纸撑出空白页 */
+  html[data-print-scope] .foot{display:none!important}
+  .ch-head h1{font-size:22pt}
+  h2{font-size:13pt;break-after:avoid;page-break-after:avoid}
+  h3{break-after:avoid;page-break-after:avoid}
+  .scene,.sx,.note,.flags,.afterword,.stub,details{break-inside:avoid;page-break-inside:avoid}
+  .led{break-inside:avoid;page-break-inside:avoid}
+  /* 表可以跨页（thead 会自动重复），但一行不许被劈成两半 */
+  .tbl thead{display:table-header-group}
+  .tbl tr{break-inside:avoid;page-break-inside:avoid}
+  details{border:1px solid #ddd}
+  summary::after{display:none}
+  a{color:inherit;border-bottom:0}
+  em{background:none;font-weight:600}
+  .sx-grid{grid-template-columns:1fr 1fr}
+}
+/* 纸必须是 A4：国内打印店和学校打印机全是 A4，留默认的 Letter 会被缩印或裁掉底边。
+   页脚整条交给 @page 的边距盒（Chrome 支持），左书名、右页码，永远落在白边里，
+   不占正文的行，也就不会把一章的最后一行挤成一张只有脚注的孤页。
+   封面是第 1 页，不印。 */
+@page{
+  size:A4;margin:15mm 14mm;
+  @bottom-left{
+    content:"一根烟的事";
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    font-size:7.5pt;color:#B3AA9E;letter-spacing:.06em;
+  }
+  @bottom-right{
+    content:counter(page);
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    font-size:8.5pt;color:#8C8478;letter-spacing:.06em;
+  }
+}
+@page:first{@bottom-left{content:""}@bottom-right{content:""}}
+
+/* ---------- 本册新增 ---------- */
+/* ---------- 本册新增：数字卡 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0 14px}
+.stat{
+  padding:18px 16px 15px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;
+}
+.stat b{
+  display:block;font-size:29px;line-height:1.15;letter-spacing:-.02em;
+  color:var(--accent);font-variant-numeric:tabular-nums;
+}
+.stat b small{font-size:14px;font-weight:600;margin-left:1px}
+.stat span{display:block;margin-top:8px;font-size:13px;line-height:1.65;color:var(--ink-2)}
+.stat i{
+  display:block;margin-top:9px;font-style:normal;font-size:11px;
+  line-height:1.5;color:var(--ink-3);
+}
+
+/* ---------- 出处 ---------- */
+.cite{
+  display:block;margin:-4px 0 22px;font-size:11.5px;
+  line-height:1.7;color:var(--ink-3);letter-spacing:.01em;
+}
+.cite b{font-weight:400;color:var(--ink-2)}
+
+/* ---------- 时间线 ---------- */
+.tl{list-style:none;margin:24px 0 26px;padding:0 0 0 20px;border-left:1px solid var(--line)}
+.tl li{position:relative;padding:0 0 17px 18px}
+.tl li:last-child{padding-bottom:2px}
+.tl li::before{
+  content:"";position:absolute;left:-25px;top:7px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--card);border:1.5px solid var(--accent);
+}
+.tl b{display:block;font-size:13.5px;color:var(--accent);letter-spacing:.02em;margin-bottom:1px}
+.tl span{font-size:14.5px;line-height:1.75;color:var(--ink-2)}
+
+/* ---------- 说法与漏掉的部分 ---------- */
+.myth col.w1{width:38%}
+.myth col.w2{width:62%}
+.myth td.say{font-weight:600;color:var(--ink)}
+.myth td.miss{color:var(--ink-2);font-size:13.5px}
+
+/* ---------- 两栏对照 ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair > div{padding:16px 18px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.pair h4{margin:0 0 8px;font-size:14px;letter-spacing:.02em}
+.pair p{margin:0 0 8px;font-size:14px;line-height:1.8;color:var(--ink-2)}
+.pair p:last-child{margin-bottom:0}
+.pair .a h4{color:var(--ink-3)}
+.pair .b{border-color:#EDCFC0;background:linear-gradient(180deg,#FDF2EC,#FBF6F1)}
+.pair .b h4{color:var(--accent)}
+
+/* 附录单独起一页，可以撕下来贴 */
+.appendix{margin-top:10px}
+@media print{.appendix{break-before:page;page-break-before:always;margin-top:0}}
+
+@media screen and (max-width:900px){
+  .stats{grid-template-columns:1fr}
+  .pair{grid-template-columns:1fr}
+}
+
+@media print{
+  .stats{gap:8px;margin:14px 0 10px;grid-template-columns:repeat(3,1fr)}
+  .stat{padding:11px 11px 9px}
+  .stat b{font-size:17pt}
+  .stat span{font-size:8.5pt;margin-top:4px;line-height:1.5}
+  .stat i{font-size:7pt;margin-top:5px}
+  .cite{font-size:7.5pt;margin:-2px 0 12px}
+  .tl{margin:12px 0 14px}
+  .tl li{padding-bottom:8px}
+  .tl span{font-size:9.5pt;line-height:1.6}
+  .pair{gap:8px;margin:12px 0 16px}
+  .pair > div{padding:10px 12px 9px}
+  .pair p{font-size:9.5pt;line-height:1.65;margin-bottom:5px}
+  .myth td.miss{font-size:9pt}
+}
+</style>
+</head>
+<body>
+<div class="mbar">
+  <span class="t" id="mbarTitle">一根烟的事</span>
+  <button type="button" id="openToc" aria-label="打开目录">目录</button>
+</div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="brand">
+      <div class="mark">烟草科普</div>
+      <h1>一根烟的事</h1>
+      <p>烟、空气，和站在中间的人</p>
+    </div>
+    <ul class="nav" id="navList">
+      <li><a href="#start" data-target="start"><span class="n">—</span><span>写在前面</span></a></li>
+      <li><a href="#ch1" data-target="ch1"><span class="n">01</span><span>一根烟烧出了什么</span></a></li>
+      <li><a href="#ch2" data-target="ch2"><span class="n">02</span><span>二手烟：你没抽也在吸</span></a></li>
+      <li><a href="#ch3" data-target="ch3"><span class="n">03</span><span>三手烟：烟散了还在</span></a></li>
+      <li><a href="#ch4" data-target="ch4"><span class="n">04</span><span>电子烟：换了个壳</span></a></li>
+      <li><a href="#ch5" data-target="ch5"><span class="n">05</span><span>为什么明知有害还抽</span></a></li>
+      <li><a href="#ch6" data-target="ch6"><span class="n">06</span><span>戒：不是意志力的事</span></a></li>
+      <li><a href="#ch7" data-target="ch7"><span class="n">07</span><span>不抽烟的人，能做什么</span></a></li>
+      <li><a href="#end" data-target="end"><span class="n">—</span><span>结语与一页数字</span></a></li>
+    </ul>
+    <div class="toc-foot">
+      <p style="margin:0 0 10px">打印一份，贴在看得见的地方。</p>
+      <button type="button" class="print-btn" id="printBtn">打印全册</button>
+      <button type="button" class="print-btn is-ghost" id="printChBtn">只打印这一章<span class="cur" id="curChName">写在前面</span></button>
+      <p>要带页码的成品，用 <code>dist/pdf</code> 里那份。</p>
+      <p>在浏览器里存：目标选「另存为 PDF」，存完等两三秒再打开。</p>
+    </div>
+  </aside>
+
+  <main>
+    <div class="page">
+
+      <!-- ==================== 写在前面 ==================== -->
+      <section data-chapter id="start" data-title="写在前面">
+        <div class="cover">
+          <div class="kicker">写给抽烟的人，也写给每天闻得到烟的人</div>
+          <h1>一根烟<br>的事</h1>
+          <p class="sub">吸烟、二手烟、三手烟，<br>以及那句「关你什么事」。</p>
+          <div class="rule"></div>
+
+          <p>午休，三楼尽头的厕所。门一推开，一股温热的、混着消毒水的气味扑出来。最里面那个隔间亮着灯，门底下漏出一线光；红光一亮一暗，很规律。</p>
+          <p>你洗了手，四十秒，出来。走到楼梯口，鼻腔里还是那股味。</p>
+          <p>这件事小到不值得写一本书。它每天都在发生，发生完就散了，没人受伤，没人报警。</p>
+          <p>但它背后站着一句话，那句话值得写一本书——</p>
+
+          <div class="pull">
+            <p>我抽我的，关你什么事。</p>
+          </div>
+
+          <p>说这句话的人，多半不是耍横。他是真心这么想的：烟进了我的肺，钱从我口袋里出，后果我自己担。听起来，这是一笔只涉及一个人的交易。</p>
+          <p>这本书想说清楚的是：这笔交易里还有别人。不是道德意义上的「别人」，是物理意义上的——空气是共用的，墙是共用的，衣服和头发也是。</p>
+          <p>所以它不劝人。它只做三件事：把一根烟烧出来的东西列清楚；把「我抽我的」这句话里漏掉的部分补上；给已经在抽的人，和天天在闻的人，各留一条能走的路。</p>
+
+          <h2><span class="h2n">说明</span>这些话凭什么信</h2>
+          <ul class="how">
+            <li><span class="k">数字有出处</span><span class="v">每个数字后面都标了来源。查不到出处的，宁可不写——这本册子里的数字不多，但都能对回去。</span></li>
+            <li><span class="k">不评判人</span><span class="v">不写「你应该」，也不写「你没救」。成瘾是生理机制，不是品格缺陷；这本书骂的是烟，不是抽烟的人。</span></li>
+            <li><span class="k">不够就说不够</span><span class="v">戒烟难就是难，电子烟的证据就是还没那么硬。含糊的地方会直接说含糊，不拿一个漂亮结论糊过去。</span></li>
+            <li><span class="k">有出口</span><span class="v">最后一章给的是能立刻用的做法——离开、站位、说话的三个版本、往哪儿反映。不是一句「请远离烟草」。</span></li>
+          </ul>
+
+          <p>还有一句要提前说：这本书里没有一件事是必须做的。它把账算给你看，怎么选是你的事。</p>
+
+          <h2><span class="h2n">用法</span>三句话</h2>
+          <ul class="how">
+            <li><span class="k">可以跳</span><span class="v">七章各自独立。想先看结论，翻<a href="#ch5" data-target="ch5">第五章</a>；只想知道怎么躲开，翻<a href="#ch7" data-target="ch7">第七章</a>。<b>它是一本可以查的册子，不是一本要读完的书。</b></span></li>
+            <li><span class="k">先看数字</span><span class="v">第二章讲别人吐出来的烟，第五章讲自己点烟的那只手。这两章的数字最硬，也最容易被记住。</span></li>
+            <li><span class="k">要打出来</span><span class="v">A4，页码在页脚，封面这张索引里的页码和正文对得上。打印出来传着看，比在群里发一个链接有用。</span></li>
+          </ul>
+
+          <h2><span class="h2n">入口</span>你现在最想弄清楚哪件事</h2>
+          <ul class="outline idx">
+            <li><b><a href="#ch1" data-target="ch1">一根烟到底烧出了什么</a></b><span>第一章 · 两股烟，不是一回事</span><i class="pg" data-pg="ch1">4</i></li>
+            <li><b><a href="#ch2" data-target="ch2">厕所、楼道、包间里那股散不掉的味</a></b><span>第二章 · 二手烟与「没有安全水平」</span><i class="pg" data-pg="ch2">6</i></li>
+            <li><b><a href="#ch3" data-target="ch3">外套上的烟味，回家抱了一下妹妹</a></b><span>第三章 · 三手烟，烟散了东西还在</span><i class="pg" data-pg="ch3">9</i></li>
+            <li><b><a href="#ch4" data-target="ch4">「电子烟没事吧，这个没焦油」</a></b><span>第四章 · 换了个壳，没换掉尼古丁</span><i class="pg" data-pg="ch4">11</i></li>
+            <li><b><a href="#ch5" data-target="ch5">「我知道有害，但就是戒不掉」</a></b><span>第五章 · 七到十秒，和五种说法</span><i class="pg" data-pg="ch5">13</i></li>
+            <li><b><a href="#ch6" data-target="ch6">戒了几次，都没成</a></b><span>第六章 · 工具，而不是意志力</span><i class="pg" data-pg="ch6">16</i></li>
+            <li><b><a href="#ch7" data-target="ch7">我不抽烟，但天天被迫闻</a></b><span>第七章 · 四个动作，三句话</span><i class="pg" data-pg="ch7">19</i></li>
+            <li><b><a href="#end" data-target="end">最后：如果只记一页</a></b><span>结语 · 八个最值得带走的数字</span><i class="pg" data-pg="end">22</i></li>
+          </ul>
+
+          <div class="note">
+            <b>一句说明。</b>这本册子是科普，不是诊断，也不是处方。戒烟药物属于处方药，未成年人用药必须由医生评估。持续咳嗽、胸闷、喘不上气，去医务室或者医院——那里的医生能看到你，这本册子看不到。
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 第一章 ==================== -->
+      <section data-chapter id="ch1" data-title="第一章 · 一根烟烧出了什么">
+        <header class="ch-head">
+          <div class="ch-num">第 一 章</div>
+          <h1>一根烟烧出了什么</h1>
+          <p class="lede">烟叶里没有七千种化学物质。它们是烧出来的。</p>
+        </header>
+
+        <figure class="scene">
+          <p>下班前的楼道拐角，消防栓旁边。一个人背对着墙，手拢着打火机。</p>
+          <p>火苗舔上烟头的那一下，烟丝先鼓起来，然后塌下去。他吸了一口，把烟夹在指间，垂在身侧。</p>
+          <p>接下来八分钟，他没再吸几口。烟就那样夹着，自己烧。</p>
+          <p>灰落在地上，一小截一小截。</p>
+          <figcaption>写字楼四层，下班前十分钟</figcaption>
+        </figure>
+
+        <p>大部分人以为烟是「被吸掉」的。其实一支烟烧完的十分钟里，被吸进去的只有八到十口，加起来不到一分钟。剩下那九分钟，它夹在手上、搁在烟灰缸边、竖在窗台上，自己烧。</p>
+        <p>这九分钟有个名字，叫阴燃。</p>
+        <p>搞清这根烟在干什么，得从它被点着的那一秒开始。</p>
+
+        <h2><span class="h2n">1.1</span>燃烧是制造，不是释放</h2>
+        <p>烟叶里主要是纤维素、糖、蛋白质、生物碱。这些东西本身谈不上多毒。但火一上来，温度、缺氧、干馏同时发生，分子被拆开又重组，出来的是另一批东西。</p>
+        <p>一支烟烧完，能检出七千多种化学物质，其中至少六十九种已知能致癌。这个数字不是危言耸听，是世界卫生组织用了很多年的口径。</p>
+        <p>关键在于温度。吸烟的时候，燃烧端能到 900℃；不吸的时候，它只是阴燃，600℃ 左右。温度低，氧气又不够，燃烧就不完全——不完全燃烧的产物，比充分燃烧更复杂，也更难对付。</p>
+        <p>所以烟不是「从烟叶里跑出来的」。它是被现场做出来的。</p>
+
+        <h2><span class="h2n">1.2</span>两股烟，不是一回事</h2>
+        <p>同一支烟，其实在冒两股烟。</p>
+        <p><strong>主流烟</strong>是你吸进去的那口。它经过烟丝、经过滤嘴，温度高，燃烧相对充分。</p>
+        <p><strong>侧流烟</strong>是烟头自己烧出来的那股。它不经过滤嘴，温度低，缺氧，直接排进空气里。</p>
+        <p>两股烟的成分不一样。同样一克烟，侧流烟里的一氧化碳约是主流烟的五倍，烟碱三倍，苯并芘四倍，亚硝胺五十倍。而室内二手烟里，侧流烟占了绝大部分——常见的估计是八成以上。</p>
+
+        <div class="pair">
+          <div class="a">
+            <h4>主流烟</h4>
+            <p>经过滤嘴，温度约 900℃，燃烧相对充分。</p>
+            <p>被吸进去，留在吸烟者的肺里。</p>
+            <p>抽一口，才有一口。</p>
+          </div>
+          <div class="b">
+            <h4>侧流烟</h4>
+            <p>没有滤嘴，约 600℃，缺氧、不完全燃烧。</p>
+            <p>直接排进房间，占室内二手烟的八成以上。</p>
+            <p>只要还点着，就一直在冒。</p>
+          </div>
+        </div>
+
+        <p>这里有句话得先说清楚，否则上面那组倍数很容易被读歪。</p>
+        <p>「亚硝胺五十倍」说的是<em>同样一克烟里谁更毒</em>，不是「吸二手烟等于吸了五十倍的烟」。吸烟者是把主流烟深深吸进肺里，非吸烟者吸的是被整间屋子的空气稀释过的环境烟，真正进入体内的剂量，通常还是低于吸烟者。</p>
+        <p>那为什么还要知道这组数？因为它解释了一件很日常的事：为什么「他只抽了一根」和「味道一整天都在」可以同时成立。侧流烟不是一次性事件，是一个持续排放的源头。你闻到的不是残留，是正在进行。</p>
+
+        <h2><span class="h2n">1.3</span>一间厕所里的浓度</h2>
+        <p>一支烟烧完，能放出十几毫克细颗粒物。听起来不多——十几毫克，一粒米那么重。</p>
+        <p>但把它放进一间三四平方米、门窗关着、没有对流的厕所，这些颗粒没有地方去。它们悬在空气里，浓度可以冲到几百微克每立方米。作为参照：空气质量二级标准的日均限值是 75。</p>
+        <p>更麻烦的是颗粒上挂着的东西。尼古丁、亚硝胺、苯并芘、一氧化碳，都搭在这些颗粒上。雾霾天你戴口罩，是因为颗粒；而这里的颗粒，还带着别的货。</p>
+        <p>一氧化碳值得单独说一句。它会抢在氧气前面跟血红蛋白结合，占掉本该运氧的位置。浓度高的时候，人会闷、头胀、心跳快。这也是为什么从那种厕所出来，除了鼻子难受，还会有一点说不清的疲惫。</p>
+
+        <h2><span class="h2n">1.4</span>它不会停在点燃的地方</h2>
+        <p>侧流烟的颗粒大多在 1 微米以下。这个尺寸意味着两件事：能进到肺泡，也能跟着气流走很远。</p>
+        <p>门缝挡不住它。走廊里的穿堂风会带着它走，楼梯间的烟囱效应会把它往上抽，办公室的门开一下，它就进来了。</p>
+        <p>「我关着门呢」这句话，改变的只是烟在你视线里的位置，没有改变它在你空气里的位置。</p>
+
+        <div class="note">
+          <b>一句话小结。</b>点烟这个动作，等于在室内启动一个小型、持续、没有过滤的排放源。它不问你同不同意，也不问这间屋子原来是谁的。
+        </div>
+
+        <p class="afterword">一根烟烧十分钟，真正被吸进去的不到一分钟。剩下九分钟，它烧的是房间。</p>
+      </section>
+
+      <!-- ==================== 第二章 ==================== -->
+      <section data-chapter id="ch2" data-title="第二章 · 二手烟：你没抽，但你在吸">
+        <header class="ch-head">
+          <div class="ch-num">第 二 章</div>
+          <h1>二手烟：你没抽，但你在吸</h1>
+          <p class="lede">它不是「淡一点的一手烟」。它是另一种东西。</p>
+        </header>
+
+        <figure class="scene">
+          <p>周六下午，家里的客厅。舅舅坐在沙发上，茶几上一只玻璃烟灰缸，里面已经躺了四个烟头。</p>
+          <p>电视开着，声音很大。他把烟灰弹进缸里，很准，没看。</p>
+          <p>窗户开了一条缝，窗帘被风吹得轻轻动。烟往上走，走到窗帘那儿，散开，然后往下沉。</p>
+          <p>你在另一头写作业，写着写着，眼睛开始发涩。</p>
+          <figcaption>周六下午，家里的客厅</figcaption>
+        </figure>
+
+        <p>窗开了。烟还是往你这边走。</p>
+        <p>这件事很多人都经历过，但很少有人把它当成一件「有机制」的事——多数人只当它是气味问题，忍一忍，或者起身走开。忍一忍当然可以，但如果要判断「值不值得为这个翻脸」，得先知道自己在忍什么。</p>
+
+        <h2><span class="h2n">2.1</span>它到底是什么</h2>
+        <p>二手烟是两样东西的混合物：烟头自己烧出来的侧流烟，加上吸烟者呼出来的那一部分主流烟。前者占大头。</p>
+        <p>它不是「一手烟被空气稀释后的版本」。稀释改变的是浓度，不改变成分。七千多种化学物质还在，六十九种致癌物还在，只是被摊薄了。</p>
+        <p>而且颗粒变小了。新鲜的主流烟颗粒偏大，一部分会沉在口腔和上呼吸道；飘在空气里的二手烟颗粒大多在 1 微米以下，能一路进到肺泡。这也是为什么它对心血管的影响，比对肺的影响来得更快。</p>
+        <p>世界卫生组织的说法是：烟草烟雾可以在室内空气中停留最长五个小时。五个小时是什么概念——早上有人抽了一根，午饭时这间屋子里的空气还没有换干净。</p>
+
+        <h2><span class="h2n">2.2</span>「没有安全水平」是什么意思</h2>
+        <p>这句话经常被误读。有人听成「一点点就有事，那干脆无所谓」，也有人听成「只要没到某个量就没事」。</p>
+        <p>它真正说的是：风险随着暴露量连续上升，找不到一个「低于它就没有额外风险」的阈值。代价从第一口就开始累积，没有一条「还没到线」的安全区。</p>
+        <p>最硬的证据不在几十年后的肺癌，而在三十分钟内。健康年轻人暴露于二手烟三十分钟，超声测出来的冠状动脉血流储备就会下降——血管扩张的能力变差，而且是在你完全没感觉的情况下。这不是「心理作用」，是仪器能看见的改变。</p>
+        <p>短时间暴露还会带来：眼、鼻、咽喉的刺激，心率上升，血小板更容易聚集，血管内皮功能受损。这些都不算病，但它们都是通向病的路。</p>
+
+        <h2><span class="h2n">2.3</span>这件事在中国有多大</h2>
+
+        <div class="stats">
+          <div class="stat">
+            <b>23.2<small>%</small></b>
+            <span>15 岁及以上人群现在吸烟率，男性 43.9%</span>
+            <i>2024 年中国成人烟草调查</i>
+          </div>
+          <div class="stat">
+            <b>68.1<small>%</small></b>
+            <span>不吸烟者的二手烟暴露率，约 7 亿人</span>
+            <i>2018 年中国成人烟草调查</i>
+          </div>
+          <div class="stat">
+            <b>50.9<small>%</small></b>
+            <span>室内工作者过去 30 天在工作场所看到有人吸烟</span>
+            <i>2018 年中国成人烟草调查</i>
+          </div>
+        </div>
+        <span class="cite">数据来源：中国疾病预防控制中心；《中国吸烟危害健康报告 2020》。</span>
+
+        <p>第三个数字值得停一下。它不问「你抽不抽」，问的是「你这一个月里，有没有在工作的地方看见别人抽」。一半的人回答有。</p>
+        <p>同一份调查里还有两个数字：44.9% 的人说，自己家里有人吸烟；二手烟暴露最严重的室内场所是网吧（89.3%）、酒吧和夜总会（87.5%）和餐馆（73.3%）。</p>
+        <p>这说明二手烟不是一个「外面的世界」的问题。它就在你上班的楼道里，在你吃饭的馆子里，在你住的那栋楼里。</p>
+
+        <h2><span class="h2n">2.4</span>长期的账，不只是肺癌</h2>
+        <p>长期暴露于二手烟的不吸烟者，肺癌风险升高约 20%–30%，冠心病风险升高约 25%–30%。这两个区间来自美国卫生总监报告，也是世界卫生组织反复引用的口径。</p>
+        <p>对小孩，账来得更快：哮喘加重、中耳炎、下呼吸道感染；婴儿还可能增加猝死综合征的风险。对孕妇，是低出生体重和早产。</p>
+        <p>对年轻人，最近的那笔账其实很朴素：哮喘的人更容易发作，跑步更容易喘，感冒好得更慢，在一间有人抽烟的屋里待一下午，会头沉。这些都不够去医院，但它们是你每天都在付的利息。</p>
+
+        <h2><span class="h2n">2.5</span>通风为什么不管用</h2>
+        <p>这是最常被拿来辩解的一条：「我开着窗呢」「有排风扇」。答案是：有用，但不够，而且在有些情况下几乎没用。</p>
+        <p>美国采暖、制冷与空调工程师学会（ASHRAE）的结论很直接：通风和空气净化无法把二手烟降到安全水平，唯一有效的室内措施是禁止吸烟。这个协会是暖通行业的专业组织，不是控烟团体——它的立场本来可以更保守。</p>
+        <p>道理不复杂。净化器有一个固定的洁净空气量，而烟的排放是连续的。你可以换掉空气，换不掉源头。只要那根烟还在烧，屋子就一直在被重新填满。</p>
+        <p>开窗的效果，是把浓度从「很高」降到「高」；同时，它把烟送到了下一个人那里——走廊、楼道、隔壁阳台。</p>
+        <p>厕所的排风扇更微妙。它靠负压往外抽，但门一开一关，气流会倒灌；而且多数排风扇的风量，远小于一支烟瞬时释放的量。你以为在排，其实只是搅。</p>
+
+        <h2><span class="h2n">2.6</span>一根烟的房间</h2>
+        <p>三四平方米，门窗关着，一个人，一根烟。这是最常见的一种暴露场景，也是最容易被低估的——因为它短。几分钟，进去一趟，出来就好了。</p>
+        <p>但浓度不看时长，看空间。同样的排放量，放在三十平方米的房间里是「有点味」，放在三平方米的厕所里就是「呛」。在这两个地方待同样的两分钟，吸进去的量不是一个量级。</p>
+        <p>而且烟走了，颗粒还在。细颗粒几乎不沉降，它们会一直飘着，直到被墙、衣服、人的肺接住。下一个推门进来的人，接的是上一根的账。</p>
+
+        <p class="afterword">空气不按根计数。你点一根，它就把这间屋子重新算一遍。</p>
+      </section>
+
+      <!-- ==================== 第三章 ==================== -->
+      <section data-chapter id="ch3" data-title="第三章 · 三手烟：烟散了，东西还在">
+        <header class="ch-head">
+          <div class="ch-num">第 三 章</div>
+          <h1>三手烟：烟散了，东西还在</h1>
+          <p class="lede">味道散了，不等于东西没了。</p>
+        </header>
+
+        <figure class="scene">
+          <p>周日晚上回家，外套搭在椅背上。</p>
+          <p>周一早上起床，你把外套拿下来，凑近闻了一下领口——一股淡淡的、发甜的烟味，是昨天在舅舅家沾上的。</p>
+          <p>你把它抖了抖，挂到窗外吹了十分钟。再闻，还有。</p>
+          <figcaption>家里，周一早上六点二十</figcaption>
+        </figure>
+
+        <p>那股味不是「还没散」。它是「还在」。</p>
+        <p>烟熄灭之后，一部分物质继续飘在空气里，慢慢被稀释；另一部分落了下来，落在墙上、窗帘上、沙发上、衣服纤维里、头发上、皮肤上。这一层，有个名字叫三手烟。</p>
+        <p>它不是气味。气味只是它还在挥发的证据。</p>
+
+        <h2><span class="h2n">3.1</span>尼古丁是黏的</h2>
+        <p>烟里含量最多的有机物之一是尼古丁。它以蒸气的形式被释放出来，然后几乎全部沉降在室内表面上。沉降之后，它不会很快消失——在墙面、织物、灰尘里，可以存留数周到数月。</p>
+        <p>这就是为什么有些房间「一进去就知道有人抽烟」，哪怕窗户开了一整天。味道的来源不是空气，是表面。空气换掉了，表面还在往外释放。</p>
+        <p>衣服和头发更麻烦，因为它们是移动的。你穿着那件外套坐进办公室、坐上公交车、回到家抱起妹妹，表面上的东西就跟着你走了一路。</p>
+
+        <h2><span class="h2n">3.2</span>它还会继续变毒</h2>
+        <p>如果只是「残留的尼古丁」，事情还不算最糟。真正麻烦的是，它会接着反应。</p>
+        <p>2010 年《美国国家科学院院刊》（PNAS）上有一项研究：附着在室内表面的尼古丁，会和空气里的亚硝酸反应，生成烟草特有亚硝胺（TSNA），其中包括 NNK 和 NNN——这两个都是国际癌症研究机构列为 1 类的致癌物。</p>
+        <p>实验里，把沾了二手烟的材料放在亚硝酸环境中三个小时，表面的 TSNA 增加了十倍以上；还检出了一种新鲜烟雾里根本没有的物质 NNA。也就是说，残留物没有慢慢变淡，它在变成另一种东西。</p>
+        <p>亚硝酸从哪来？燃气灶、燃气热水器、汽车尾气。所以车里和厨房边上，是这个反应最容易发生的地方。</p>
+
+        <h2><span class="h2n">3.3</span>三个常见的误会</h2>
+
+        <div class="pair">
+          <div class="a">
+            <h4>「开窗吹吹就好了」</h4>
+            <p>通风带走的是空气里的，带不走表面上的。表面还在，就还在往外释放。</p>
+          </div>
+          <div class="b">
+            <h4>「我去外面抽」</h4>
+            <p>比在室内抽好。但皮肤和衣服上的残留会跟着你回来，落在沙发上、床上、孩子身边。</p>
+          </div>
+        </div>
+
+        <p>第三个误会是「烟味没了就没事了」。嗅觉的阈值远高于仪器的检出限——你闻不到的时候，东西往往还在。鼻子是个很灵敏的报警器，但它不是检测仪。</p>
+
+        <h2><span class="h2n">3.4</span>谁最吃亏</h2>
+        <p>婴幼儿。他们在地上爬，手抓到什么都往嘴里放，体重又小，同样的残留量，按体重算下来暴露高得多。这也是为什么三手烟的研究，最早是从儿童哮喘和婴儿健康做起的。</p>
+        <p>孕妇。尼古丁能通过胎盘，胎儿在宫内就在接触。</p>
+        <p>最近的一个场景是这样的：你在阳台抽完，回屋，抱了一下三岁的妹妹，她脸贴在你领口。这个动作持续三秒。她吸进去的，是你外套上那一层。</p>
+        <p>这不是要让人内疚。内疚不解决问题。它只是说明：暴露这件事，不是「开个窗」就能关掉的开关。</p>
+
+        <h2><span class="h2n">3.5</span>能做的几件小事</h2>
+        <p>外套不进卧室，挂在通风的地方；回家先换衣服、洗手洗脸，再抱小孩。</p>
+        <p>车里不抽烟。空间小，亚硝酸来源多，座椅和顶棚的织物又特别能存东西。</p>
+        <p>家里有小孩的：沙发套、窗帘、床单定期洗；别在室内点烟，也别在车里点。这些算不上洁癖。它们只是把暴露量往下压——压不到零，但能压掉一大截。</p>
+
+        <p class="afterword">烟味不是「还没散」，是「还在」。你闻到的每一次，都是它在提醒你它没走。</p>
+      </section>
+
+      <!-- ==================== 第四章 ==================== -->
+      <section data-chapter id="ch4" data-title="第四章 · 电子烟：换了个壳">
+        <header class="ch-head">
+          <div class="ch-num">第 四 章</div>
+          <h1>电子烟：换了个壳</h1>
+          <p class="lede">它没有在燃烧。但它仍然在给药。</p>
+        </header>
+
+        <figure class="scene">
+          <p>合租屋的客厅，十一点。茶几上放着一个奶茶杯形状的东西，蓝光亮了一下。</p>
+          <p>坐在沙发那头的人吸一口，屏住，几秒后吐出来，一团白雾在暗里散开，很快没了。</p>
+          <p>「没事，这个没焦油。」他说。</p>
+          <p>雾散得很快。味道是甜的，像某种饮料。</p>
+          <figcaption>合租屋，晚上十一点</figcaption>
+        </figure>
+
+        <p>「没焦油」这句话是真的。卷烟燃烧产生焦油，电子烟不燃烧，所以没有焦油。</p>
+        <p>但「没有焦油」不等于「只有水」。它换了一套产物，没有取消产物。</p>
+
+        <h2><span class="h2n">4.1</span>不是水蒸气，是气溶胶</h2>
+        <p>电子烟加热的是一种溶液：丙二醇、甘油、尼古丁、香精。加热之后出来的东西，物理上叫气溶胶——液体微粒悬浮在气体里，不是水蒸气。</p>
+        <p>这些微粒小到能进肺泡。而加热这个过程本身，会产生新的物质：甲醛、乙醛、丙烯醛，来自丙二醇和甘油的热解；镍、铬、铅，来自发热丝和金属管路；还有部分调味剂里的双乙酰，长期吸入与闭塞性细支气管炎有关。</p>
+        <p>中国疾控中心的说法是：电子烟气溶胶可能含有致癌化学物质、挥发性有机化合物、可深入肺部的超细颗粒，以及镍、锡、铅等重金属。</p>
+
+        <h2><span class="h2n">4.2</span>国标管住了什么，没管住什么</h2>
+        <p>2022 年 10 月 1 日，《电子烟》强制性国家标准（GB 41700-2022）实施。它管住了几件要紧的事：</p>
+        <ul class="steps">
+          <li><b>口味</b><span>不应使产品特征风味呈现除烟草外的其他风味。水果味、饮料味、糖果味的电子烟，不再允许生产和销售。</span></li>
+          <li><b>尼古丁</b><span>雾化物应含有烟碱；烟碱浓度不高于 20 mg/g，总量不高于 200 mg。不含尼古丁的「草本雾化」也不得作为电子烟销售。</span></li>
+          <li><b>温度与释放物</b><span>雾化区域温度不高于 350℃；对释放物中的甲醛、乙醛、丙烯醛设了限量；产品要有童锁。</span></li>
+        </ul>
+        <p>这些是底线，不是「无害认证」。国标的意思是「合格产品至少不能想加什么就加什么」，不是「合格产品可以放心吸」。</p>
+        <p>而且现实里还有另一层。形似奶茶杯、可乐罐的三无产品，仍在微商和小店流通；标着「0 尼古丁」的，检测出来照样有；没有成分表，没有童锁，没有抽检。国标管得住持证企业，管不住朋友圈。</p>
+
+        <h2><span class="h2n">4.3</span>它是门，不是出口</h2>
+        <p>《中国吸烟危害健康报告 2020》引了一项纳入 91051 名青少年的 Meta 分析：使用过电子烟的青少年，后来成为卷烟使用者的风险，是从不使用者的 2.21 倍。</p>
+        <p>这个数字容易被误读成「电子烟导致吸烟」。更准确的读法是：它是一条常见路径。尼古丁成瘾先建立，吸的动作先被训练，同伴圈子先重叠，然后「我能控制」这个判断被反复确认——直到某天有人递过来一根真的。</p>
+        <p>2019 年的中学生调查里，普通高中现在使用电子烟的比例是 2.2%，职业学校是 4.5%，职校男生 7.1%。绝对数不算高，但趋势是向上的：初中生「听说过电子烟」的比例，五年里从 45% 涨到了 69.9%。</p>
+
+        <h2><span class="h2n">4.4</span>那它能用来戒烟吗</h2>
+        <p>这是电子烟最有争议的地方，也是这本书最该说实话的地方。</p>
+        <p>世界卫生组织的立场是：在群体层面，目前没有足够证据支持把电子烟当作戒烟工具。它担心的不是个别人拿它过渡，是人群尺度上的长期双持。</p>
+        <p>但个体层面的证据要细一些。2024 年的 Cochrane 综述认为，尼古丁电子烟在帮助成年人戒烟上，比尼古丁替代疗法（贴片、咀嚼胶）略有效，证据质量中等；而且多数成功案例，同时接受了行为支持。</p>
+        <p>翻译成人话：它可能对一部分人有帮助，但不是「随便买一个就能戒」的东西。把它当戒烟工具，得放在医生或戒烟门诊的框架里用；自己买来一边抽卷烟一边抽它，那叫双持，两种产品的危害叠加。</p>
+        <p>对未成年人，这件事没有讨论空间：尼古丁影响发育中的大脑，注意力、学习、情绪调节都会受影响，而戒断比成年人更难。</p>
+
+        <p class="afterword">换壳不换账。尼古丁还是那个尼古丁，只是换了一种送法。</p>
+      </section>
+
+      <!-- ==================== 第五章 ==================== -->
+      <section data-chapter id="ch5" data-title="第五章 · 为什么明知有害还抽">
+        <header class="ch-head">
+          <div class="ch-num">第 五 章</div>
+          <h1>为什么明知有害还抽</h1>
+          <p class="lede">不是不知道。是知道了，仍然觉得它不会落在自己身上。</p>
+        </header>
+
+        <figure class="scene">
+          <p>加班到九点，小区门口的花坛边。三个人蹲着，一个人从兜里摸出烟盒，抖出一根，递过去。</p>
+          <p>「不抽了，我女朋友发现了要打死我。」</p>
+          <p>「就一根。」</p>
+          <p>他接了。点着，吸了一口，咳了两下，然后把烟夹在手里，看着它烧。</p>
+          <figcaption>加班后的晚上，小区门口</figcaption>
+        </figure>
+
+        <p>「就一根」是这件事最常见的入口。它之所以有效，不是因为它是真的，是因为它听起来像真的——一根确实不会让人得肺癌，一根确实不会上瘾。</p>
+        <p>问题在于，说这句话的人，通常已经在说第二十次「就一根」了。</p>
+        <p>这一章不讨论「该不该」，只拆解「为什么」。因为如果不搞清这台机器怎么运转，所有的劝都只是在跟它的外壳说话。</p>
+
+        <h2><span class="h2n">5.1</span>七到十秒</h2>
+        <p>尼古丁吸入后，七到十秒到达大脑。这个速度比静脉注射还快。</p>
+        <p>它作用于奖赏回路，多巴胺上升，人会觉得松了一下、定了一下。同时，大脑开始调整：尼古丁受体上调，同样一支烟带来的满足感变少。于是需要更多、更频繁，才能拿到最初那个感觉。</p>
+        <p>尼古丁在血里的半衰期大约两小时。两小时后，浓度下去，戒断上来：烦躁、注意力散、手空、坐不住、看什么都不顺眼。</p>
+        <p>于是有了「饭后一根」「休息时一根」「睡前一根」。这些不是习惯，是补货。</p>
+        <p>这里有一个关键的反转，值得慢慢读一遍：</p>
+
+        <div class="pull">
+          <p>「抽烟解压」测到的，是戒断焦虑的缓解，不是压力本身的下降。尼古丁先制造了那些症状，再负责缓解它们。</p>
+        </div>
+
+        <p>这不是说抽烟的人矫情。戒断是真的难受，难受到影响做事、影响睡觉。但要知道难受的来源——它不是你本来就这么焦虑，是你上一次吸进去的东西在退潮。</p>
+        <p>每一根烟，都在把基线往下压一点。然后你需要下一根，才能回到「正常」。所谓「放松」，其实是回到不难受的状态；而那个不难受的状态，不抽烟的人一直都有。</p>
+
+        <h2><span class="h2n">5.2</span>五种说法，各漏了什么</h2>
+        <p>下面这五句，是这件事里最常听见的。它们不是谎话，每一句都有一小块是真的。问题在于，每一句都漏掉了另一半。</p>
+
+        <table class="myth tbl">
+          <colgroup><col class="w1"><col class="w2"></colgroup>
+          <thead><tr><th>说法</th><th>它漏掉了什么</th></tr></thead>
+          <tbody>
+            <tr><td class="say">「我抽得少，一天就三五根。」</td><td class="miss" data-k="漏掉了">心血管风险在低剂量就开始上升，没有一条「安全线」；而且「少」通常会随时间变多。间歇吸烟同样会成瘾，戒断反应一样不少。</td></tr>
+            <tr><td class="say">「我爷爷抽到九十岁。」</td><td class="miss" data-k="漏掉了">这是幸存者偏差。你看见的是活到九十的那个，没看见的是没活到的。群体风险是 2–3 倍，个体结果无法预测——这两件事可以同时为真。</td></tr>
+            <tr><td class="say">「压力大，没办法。」</td><td class="miss" data-k="漏掉了">尼古丁本身在制造压力。一支烟的缓解大约维持半小时到两小时，之后是更低的基线。用烟对付压力，是把压力换成另一种压力。</td></tr>
+            <tr><td class="say">「电子烟没事，这个没焦油。」</td><td class="miss" data-k="漏掉了">气溶胶里仍有尼古丁、甲醛、重金属；而且它是卷烟的门。没有焦油，不等于没有代价。</td></tr>
+            <tr><td class="say">「我抽我的，关你什么事。」</td><td class="miss" data-k="漏掉了">这句话的前提是「烟只在我肺里」。但八成以上的烟排进了空气，一部分留在墙和衣服上。边界不在你的肺，在别人的鼻子。</td></tr>
+          </tbody>
+        </table>
+
+        <p>前四条，是跟自己算账；第五条，是跟别人算账。</p>
+        <p>跟自己算账的那四条，可以争——账本在你手里，你怎么权衡是你的事。第五条没法争。账本可以谈，排放没法谈。</p>
+        <p>你可以决定自己承担什么。你没法决定别人承担什么——除非你先把烟掐了。而只要它还在烧，这件事就一件都做不到。</p>
+
+        <h2><span class="h2n">5.3</span>为什么是现在</h2>
+        <p>十几岁到二十出头，是这件事最容易发生的窗口。原因不在意志，在施工进度。</p>
+        <p>大脑里负责冲动控制、权衡长期后果的那部分——前额叶皮层——要到二十五岁左右才成熟。在这之前，它对「此刻」的权重天然高于「三十年后」。这跟意志无关，是发育顺序。</p>
+        <p>同时，青少年对尼古丁更敏感：更快成瘾，戒断更难，开始得越早，成年后依赖的概率越高。</p>
+        <p>还有一层是环境。同伴压力很少是「被逼」，多半是「想被看见」。厕所、楼道、花坛边，是这件事发生的地方——不是因为那里舒服，是因为那里没人管，而且有人一起。</p>
+        <p>这三件事叠在一起，就构成了一个很不公平的局面：风险最高的时候，判断力还在施工；等判断力建好了，习惯已经在了。</p>
+
+        <h2><span class="h2n">5.4</span>知道和相信，是两件事</h2>
+        <p>「吸烟有害健康」这句话，印在每一包烟上，印了几十年。它没有失效，它只是没有被相信。</p>
+        <p>准确地说：人们知道这个事实，但不相信它会落在自己身上。肺癌是三十年后的图片，而「现在合群」「现在松一口气」是此刻的。大脑给此刻的权重，永远高于三十年后。</p>
+        <p>烟草行业非常清楚这一点。它不需要说服你「吸烟无害」——那太难了。它只需要让危害显得远：远到像别人的事，远到像一个统计数字，远到可以一边看警告一边点火。</p>
+        <p>反过来，你能做的也只有一件事：把远的拉近。看具体的数字，看具体的人，看具体的那间屋子——三平方米，门关着，一个人，一根烟。</p>
+
+        <div class="note">
+          <b>这一段不是劝。</b>如果你现在不打算戒，这本书没有立场要求你。但如果你打算继续抽，至少知道自己在做什么——知道这不是「一根的事」，也不是「只关于我自己的事」。
+        </div>
+
+        <p class="afterword">烟不是压力的解药，是压力的赊账。每一根都在往后推还款日，利息照算。</p>
+      </section>
+
+      <!-- ==================== 第六章 ==================== -->
+      <section data-chapter id="ch6" data-title="第六章 · 戒：不是意志力的事">
+        <header class="ch-head">
+          <div class="ch-num">第 六 章</div>
+          <h1>戒：不是意志力的事</h1>
+          <p class="lede">戒不掉通常不是「你不行」，是你只带了一件工具。</p>
+        </header>
+
+        <figure class="scene">
+          <p>厕所隔间里，手机屏幕亮着。搜索框里打着「戒烟 方法」，删掉，又打「戒烟 几天 难受」。</p>
+          <p>外面有人敲门。他把手机塞回兜里，冲了水，出来洗手。</p>
+          <p>镜子里的自己看了一眼，又低下去。</p>
+          <figcaption>写字楼厕所，午休</figcaption>
+        </figure>
+
+        <p>这个画面里没有信息差。他知道吸烟有害，知道该戒，也知道去哪儿搜。他缺的是一次成功的经验。</p>
+        <p>而「成功」这件事，很少靠一次下定决心完成。</p>
+
+        <h2><span class="h2n">6.1</span>它是病，不是品格</h2>
+        <p>世界卫生组织的疾病分类里，烟草依赖有独立的编码（ICD-10：F17.2），归在精神与行为障碍项下。这句话的意思是：它有诊断标准，有病理机制，有治疗方法。</p>
+        <p>也意味着：戒不掉不是「没毅力」，是「没治疗」。</p>
+        <p>只靠意志力硬戒，一年后的成功率通常只有个位数，常见估计是不足 5%。这不是劝退，恰恰相反——它说明失败是默认结果，成功需要额外的工具。</p>
+        <p>把这件事当成品格问题，代价很实际：失败一次，人会觉得自己不行；失败三次，就不试了。而归因错了，方法就永远找不对。</p>
+
+        <h2><span class="h2n">6.2</span>有效的，是一个组合</h2>
+        <p>目前证据最硬的方案，是药物加行为支持。世界卫生组织和中国临床戒烟指南的口径一致：规范的戒烟治疗，可以把成功率提高 1–2 倍。</p>
+        <p>三类一线药物：</p>
+        <ul class="steps">
+          <li><b>尼古丁替代疗法</b><span>贴片、咀嚼胶。用少量尼古丁缓解戒断，再逐步减量。非处方可及，但仍建议先咨询医生或药师。</span></li>
+          <li><b>盐酸安非他酮缓释片</b><span>处方药。作用于与成瘾相关的神经通路，需医生评估，有癫痫史等情况不能用。</span></li>
+          <li><b>酒石酸伐尼克兰</b><span>处方药。部分激动尼古丁受体，既减轻戒断，也降低吸烟的快感。效果在三类里通常最强，同样需医生评估。</span></li>
+        </ul>
+        <p>行为支持不是「聊聊天」。它包括设定戒烟日、识别触发场景、处理戒断、应对复吸、调整作息。戒烟门诊做的就是这个，热线和小程序做的也是这个。</p>
+        <p>关键在叠起来，不在选一个。药物处理生理，行为支持处理场景，环境处理诱因。三样都在，成功率才像一个可以期待的数。</p>
+
+        <h2><span class="h2n">6.3</span>在哪儿找到这些</h2>
+        <p><strong>戒烟门诊。</strong>多数三甲医院的呼吸科或控烟门诊设有。微信搜「中国戒烟平台」小程序，可以查附近的门诊并直接挂号。</p>
+        <p><strong>全国专业戒烟热线：400-808-5531。</strong>免费，有人接，可以问「我这种情况该怎么开始」。</p>
+        <p><strong>12320。</strong>卫生热线，可以转戒烟咨询，也可以问本地戒烟门诊的地址。</p>
+        <p><strong>「中国戒烟平台」小程序。</strong>中国疾控中心与世界卫生组织驻华代表处联合推出，含戒烟门诊、戒烟热线、吸烟日记、用药助手。</p>
+        <p><strong>「在线戒烟」小程序。</strong>中日友好医院做的，报名后按节点推送指导，周期约六个半月。</p>
+        <p>如果你还在上学，还有一条：先去校医室。校医做不了治疗，但能做初筛、能判断要不要转诊。未成年人用戒烟药物，必须由医生评估。</p>
+
+        <h2><span class="h2n">6.4</span>身体什么时候开始修</h2>
+        <p>戒断难受是真的，但修复也是真的，而且开始得比想象中快。</p>
+
+        <ul class="tl">
+          <li><b>20 分钟</b><span>心率和血压开始下降，回到接近平时的水平。</span></li>
+          <li><b>12 小时</b><span>血里的一氧化碳降到接近正常，携氧能力开始恢复。</span></li>
+          <li><b>2 周 – 3 个月</b><span>循环改善，肺功能开始上升，走路和爬楼没那么喘。</span></li>
+          <li><b>1 – 9 个月</b><span>咳嗽和气短减少，气道里的纤毛重新长出来，开始把积的东西往外清。</span></li>
+          <li><b>1 年</b><span>冠心病风险降到持续吸烟者的一半。</span></li>
+          <li><b>10 年</b><span>肺癌死亡风险降到持续吸烟者的一半。</span></li>
+          <li><b>15 年</b><span>冠心病风险接近从不吸烟的人。</span></li>
+        </ul>
+        <span class="cite">时间线来源：美国疾病控制与预防中心（CDC）、世界卫生组织戒烟获益说明。</span>
+
+        <p>这张表最有用的一行，是第二行。十二小时——睡一觉的工夫，血里的一氧化碳就正常了。很多人戒的第一天就觉得「整个人清醒了」，不是错觉。</p>
+
+        <h2><span class="h2n">6.5</span>复吸不是回到原点</h2>
+        <p>多数成功戒烟的人，都经历过不止一次失败。复吸说明的是「这次的方案不够」，不是「你这辈子戒不掉」。</p>
+        <p>复盘的时候看三件事：是什么场景触发的（饭后、喝酒、吵架、考试前）；当时手上有什么工具（药、替代品、人）；下次换什么。</p>
+        <p>把复吸当数据，不当判决。这句话听起来像安慰，其实是方法——因为只有把它当数据，你才会去改方案；当成判决，你只会觉得自己不行。</p>
+
+        <p class="afterword">戒烟不是一场意志力的考试，是一次需要工具的治疗。工具不齐，考不过很正常。</p>
+      </section>
+
+      <!-- ==================== 第七章 ==================== -->
+      <section data-chapter id="ch7" data-title="第七章 · 不抽烟的人，能做什么">
+        <header class="ch-head">
+          <div class="ch-num">第 七 章</div>
+          <h1>不抽烟的人，能做什么</h1>
+          <p class="lede">你不需要说服一个抽烟的人。你只需要不让自己成为他的过滤器。</p>
+        </header>
+
+        <figure class="scene">
+          <p>公司楼下的快餐店，靠窗那桌。隔壁桌坐下三个人，其中一个把烟盒放在桌上，抽出一根，点了。</p>
+          <p>你把餐盘往自己这边挪了挪，没说话。</p>
+          <p>他们那桌在聊球赛，声音很大。烟从他们头顶飘过来，正好经过你这一桌。</p>
+          <p>你低头继续吃，吃得比刚才快。</p>
+          <figcaption>快餐店，午饭</figcaption>
+        </figure>
+
+        <p>这一章是给不抽烟的人写的。也包括那些「自己不抽，但家里有人抽」的人。</p>
+        <p>先说一个不太舒服的事实：你改变不了他。至少，不在一顿饭的时间里。所以这一章的重点不在「怎么让他戒」，在「怎么让自己少吸一点」，以及「在什么情况下，值得开口」。</p>
+
+        <h2><span class="h2n">7.1</span>先分清两件事</h2>
+        <p>你想改变他，还是想保护自己？</p>
+        <p>这是两条完全不同的路。混在一起，通常两件都做不成：你一边想让他灭烟，一边又不想撕破脸，最后站在那儿吸完了整根，一句都没说。</p>
+        <p>先选一个。多数时候，先选「保护自己」——因为它可控，而且立刻生效。</p>
+
+        <h2><span class="h2n">7.2</span>保护自己：四个动作</h2>
+        <ul class="steps">
+          <li><b>离开，不谈判</b><span>厕所、楼道、包间，先出去。你不需要一个理由，也不需要对方同意。「我先出去」是一句完整的话。</span></li>
+          <li><b>站到上风口</b><span>走廊里看烟往哪边走，你往反方向走；有人在门口抽，别站在门口等。烟是跟着气流走的，站位比距离有用。</span></li>
+          <li><b>别在密闭小空间里忍两分钟</b><span>三平方米的厕所，浓度比大房间高一个量级。两分钟的暴露，不比在外面站半小时少。别用「就一会儿」说服自己。</span></li>
+          <li><b>回家先换衣服</b><span>外套挂在通风处，别搭在床头；洗手洗脸。这一步处理的是三手烟，不是味道。</span></li>
+        </ul>
+
+        <h2><span class="h2n">7.3</span>说话：三个版本</h2>
+        <p>如果你决定开口，下面三句可以直接用。它们的共同点是：说事，不说人；给台阶，不追责；不追求一次说服。</p>
+
+        <div class="pair">
+          <div class="a">
+            <h4>对朋友、同事</h4>
+            <p>「你抽完再进来，我先出去。」</p>
+            <p>不评价他，只划自己的边界。这句话最难被顶回来，因为它没有指责。</p>
+          </div>
+          <div class="b">
+            <h4>对长辈、亲戚</h4>
+            <p>「我去阳台待会儿，你们聊。」</p>
+            <p>把自己移开，不要求对方改变。在饭桌上，这比「您能不能别抽」有效，因为它不制造对抗。</p>
+          </div>
+        </div>
+
+        <p>第三句是给公共场所的：「这里不能抽烟。」说规则，不说人；一句就够，不追着讲道理。对方情绪上来，就撤——你要的是空气，不是胜利。</p>
+        <p>有一句话最好别用：「我闻不惯。」它听起来像挑剔，把一件关于健康的事，降级成了一件关于口味的事。</p>
+
+        <h2><span class="h2n">7.4</span>结构性的做法</h2>
+        <p>个人的躲闪有上限。要真正改变一个场所，得让规则起作用。</p>
+        <p>室内公共场所本来就禁烟。《公共场所卫生管理条例实施细则》第十八条规定，室内公共场所禁止吸烟；北京、上海、深圳等地还有更严的地方条例。也就是说，餐馆包间、写字楼楼道、电梯、网吧、公交车厢里的那根烟，本来就不该在那里。</p>
+        <p>场所不同，找的人也不同：餐馆找店长，写字楼找物业，商场找服务台，居民楼找物业或居委会；公交、地铁、商场这类公共场所，可以直接打 12345。</p>
+        <p>厕所吸烟还有一层消防问题：纸篓、干手纸、隔板，都是易燃物。这一点在反映问题时，往往比「影响健康」更被重视。</p>
+        <p>反映的时候给三样东西：时间、地点、频次。比如「周二、周四午休，三楼西侧厕所，通常两三个人」——这比「有人抽烟」有用得多，因为它可以被核查，也可以被安排巡查。</p>
+
+        <h3>如果你还在上学</h3>
+        <p>教育部要求各级各类学校全面建设无烟学校，教室、宿舍、厕所都在范围内。找班主任、德育处或校医室，匿名也可以；校医做不了治疗，但能做初筛、判断要不要转诊。</p>
+
+        <h2><span class="h2n">7.5</span>几件不要做的事</h2>
+        <p>不要当场对抗。你面对的可能是一个正在戒断的人，不是一个正在讲道理的人。</p>
+        <p>不要替对方保密到让自己长期暴露。「别告诉别人」可以答应一次，但不能变成你每天吸二手烟的理由。</p>
+        <p>也不要把每一次暴露都变成一场道德审判。你不是在争取一个「谁对谁错」的结论，你是在争取一口干净的空气。前者要赢，后者只要走开。</p>
+
+        <p class="afterword">自由是有边界的。你的自由，到别人的鼻子为止。</p>
+      </section>
+
+      <!-- ==================== 结语 ==================== -->
+      <section data-chapter id="end" data-title="结语与一页数字">
+        <header class="ch-head">
+          <div class="ch-num">结 语</div>
+          <h1>回到那间厕所</h1>
+        </header>
+
+        <p>你洗了手，四十秒，出来。走到楼梯口，鼻腔里还是那股味。</p>
+        <p>这件事里没有坏人。抽烟的那个人可能刚被领导批了一顿，可能刚跟家里吵完，可能只是想让这十分钟快点过去。他有他的理由，那些理由多半是真的。</p>
+        <p>但理由是真的，代价也是真的。而且代价不全由他付。</p>
+        <p>一根烟烧十分钟。九分钟夹在指间，自己烧；不到一分钟，被吸进去。这十分钟里，烟没有停在任何一个肺里——它在空气里，在墙缝里，在别人的外套上，在下一个推门进来的人的鼻腔里。</p>
+        <p>所以这本书从头到尾，其实只说了三件事：</p>
+
+        <div class="pull">
+          <p>烟不是只烧一个人。<br>味道散了，东西还在。<br>你能决定的，是让不让自己站在那口气里。</p>
+        </div>
+
+        <p>就这些。</p>
+
+        <h2><span class="h2n">依据</span>这些数字从哪儿来</h2>
+        <div class="note">
+          世界卫生组织烟草与二手烟事实清单；中国疾控中心 2018、2024 年中国成人烟草调查、2019 年中国中学生烟草调查；国家卫健委《中国吸烟危害健康报告 2020》；Sleiman 等，PNAS 2010（三手烟与亚硝胺）；Otsuka 等，JAMA 2001（30 分钟暴露与冠状动脉血流储备）；GB 41700-2022《电子烟》强制性国家标准；美国卫生总监报告 2014；CDC 戒烟获益时间线。<b>正文里每一个数字都能在这几处找到落点；查不到出处的说法，这本书没有写。</b>
+        </div>
+
+        <div class="appendix">
+        <h2><span class="h2n">附</span>如果只记一页</h2>
+        <p>下面这八个数字，是全书最值得带走的部分。抄在黑板上、印在传单上、发在群里，都够用。</p>
+
+        <table class="spec tbl">
+          <colgroup><col class="w1"><col class="w2"><col class="w3"></colgroup>
+          <thead><tr><th>数字</th><th>说的是什么</th><th>出处</th></tr></thead>
+          <tbody>
+            <tr><td class="c1">7000+</td><td class="c2" data-k="说的是">烟草烟雾里的化学物质种类</td><td class="c3" data-k="出处">世界卫生组织</td></tr>
+            <tr><td class="c1">69</td><td class="c2" data-k="说的是">其中已知能致癌的种类</td><td class="c3" data-k="出处">世界卫生组织</td></tr>
+            <tr><td class="c1">85%</td><td class="c2" data-k="说的是">侧流烟在室内二手烟里的占比</td><td class="c3" data-k="出处">《呼吸病学名词》；环境烟草烟雾研究</td></tr>
+            <tr><td class="c1">50 倍</td><td class="c2" data-k="说的是">侧流烟中亚硝胺浓度相对主流烟</td><td class="c3" data-k="出处">同上（同质量比较，非吸入剂量）</td></tr>
+            <tr><td class="c1">68.1%</td><td class="c2" data-k="说的是">中国不吸烟者的二手烟暴露率</td><td class="c3" data-k="出处">2018 年中国成人烟草调查</td></tr>
+            <tr><td class="c1">44.9%</td><td class="c2" data-k="说的是">说自己家里有人吸烟的人</td><td class="c3" data-k="出处">2018 年中国成人烟草调查</td></tr>
+            <tr><td class="c1">2.21 倍</td><td class="c2" data-k="说的是">青少年用电子烟后转吸卷烟的风险</td><td class="c3" data-k="出处">91051 人 Meta 分析，见《中国吸烟危害健康报告 2020》</td></tr>
+            <tr><td class="c1">100 万+</td><td class="c2" data-k="说的是">中国每年因吸烟死亡的人数</td><td class="c3" data-k="出处">《中国吸烟危害健康报告 2020》</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note">
+          <b>最后一句。</b>这本册子不卖东西，也没有要你转发。如果它有用，唯一的用法是：下次推开那扇门的时候，你知道自己在推什么。
+        </div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <p><strong>一根烟的事</strong> · 吸烟、二手烟、三手烟，以及那句「关你什么事」</p>
+        <p class="disc">本册为健康科普，不构成诊疗建议或用药指导。戒烟药物为处方药，须在医生指导下使用；未成年人用药须由医生评估。持续咳嗽、胸闷、气短，请及时就医。</p>
+        <p>文中场景是日常生活常见情境的写作化处理，不指向任何具体个人或学校。</p>
+        <p class="ver">v1.0 · 2026-11-02</p>
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="head">
+    <span>目 录</span>
+    <button type="button" id="closeToc" aria-label="关闭目录">×</button>
+  </div>
+  <ul class="nav" id="navListMobile"></ul>
+  <button type="button" class="print-btn" id="printBtn2">打印全册</button>
+  <button type="button" class="print-btn is-ghost" id="printChBtn2">只打印这一章<span class="cur" id="curChName2">写在前面</span></button>
+  <p class="sheet-tip">手机大多不出打印框（微信里打开更不行）。要纸质，用电脑打开这个文件。</p>
+</div>
+
+<script>
+
+(function () {
+  var secs = Array.prototype.slice.call(document.querySelectorAll('[data-chapter]'));
+  var ids = secs.map(function (s) { return s.id; });
+  var navA = Array.prototype.slice.call(document.querySelectorAll('[data-target]'));
+  var titles = {};
+  secs.forEach(function (s) {
+    var h = s.querySelector('h1');
+    titles[s.id] = h ? h.textContent.trim() : '';
+  });
+
+  /* 侧栏标签：封面那章的 h1 是书名，目录里却叫「写在前面」，打印按钮上要用后者 */
+  var labels = {};
+  Array.prototype.forEach.call(document.querySelectorAll('#navList a'), function (a) {
+    var sp = a.querySelectorAll('span');
+    if (sp.length) labels[a.getAttribute('data-target')] = sp[sp.length - 1].textContent.trim();
+  });
+  var curId = ids[0];
+
+  var mbarTitle = document.getElementById('mbarTitle');
+  var curChName = document.getElementById('curChName');
+  var curChName2 = document.getElementById('curChName2');
+
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  var printStarted = false;
+
+  function toast(msg, ms) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, ms || 9000);
+  }
+  var sheet = document.getElementById('sheet');
+  var navMobile = document.getElementById('navListMobile');
+
+  /* 移动端目录：复制一份 */
+  navMobile.innerHTML = document.getElementById('navList').innerHTML;
+
+  function activate(id, opts) {
+    if (ids.indexOf(id) === -1) id = ids[0];
+    secs.forEach(function (s) { s.hidden = (s.id !== id); });
+    navA.forEach(function (a) {
+      var on = a.getAttribute('data-target') === id;
+      a.classList.toggle('is-active', on);
+      if (on) { a.setAttribute('aria-current', 'page'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+    mbarTitle.textContent = titles[id] || '一根烟的事';
+    curId = id;
+    var nm = labels[id] || titles[id] || '';
+    if (curChName) curChName.textContent = nm;
+    if (curChName2) curChName2.textContent = nm;
+    if (document.documentElement.getAttribute('data-print') !== 'on') {
+      window.scrollTo(0, 0);
+      requestAnimationFrame(function () { window.scrollTo(0, 0); });
+    }
+    if (opts && opts.focus !== false) {
+      document.title = (titles[id] ? titles[id] + ' · ' : '') + '一根烟的事';
+    }
+  }
+
+  function go(id) {
+    if (location.hash.slice(1) === id) { activate(id); }
+    else { location.hash = id; }
+    closeSheet();
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-target]') : null;
+    if (!a) return;
+    e.preventDefault();
+    go(a.getAttribute('data-target'));
+  });
+
+  window.addEventListener('hashchange', function () {
+    activate(location.hash.slice(1));
+  });
+
+  function openSheet() { sheet.classList.add('on'); sheet.setAttribute('aria-hidden', 'false'); }
+  function closeSheet() { sheet.classList.remove('on'); sheet.setAttribute('aria-hidden', 'true'); }
+
+  document.getElementById('openToc').addEventListener('click', openSheet);
+  document.getElementById('closeToc').addEventListener('click', closeSheet);
+
+  /* 打印范围：null = 全册；给一个 id = 只打那一章。作用力全在打印样式上，屏幕上不变化 */
+  function setScope(id) {
+    var root = document.documentElement;
+    secs.forEach(function (s) {
+      s.removeAttribute('data-print-on');
+      s.removeAttribute('data-print-first');
+    });
+    var hit = null;
+    if (id) {
+      secs.forEach(function (s) { if (s.id === id) hit = s; });
+    }
+    if (!hit) { root.removeAttribute('data-print-scope'); return false; }
+    root.setAttribute('data-print-scope', '1');
+    hit.setAttribute('data-print-on', '');
+    hit.setAttribute('data-print-first', '');
+    return true;
+  }
+
+  function doPrint(scope) {
+    setScope(scope || null);
+    document.documentElement.setAttribute('data-print', 'on');
+    secs.forEach(function (s) { s.hidden = false; });
+    var ds = document.querySelectorAll('details');
+    ds.forEach(function (d) { if (!d.open) { d.dataset.wasClosed = '1'; d.open = true; } });
+
+    printStarted = false;
+    window.print();
+
+    /* 对话框本该在上一行同步弹出。800 毫秒后 beforeprint 还没触发，说明这台设备
+       根本不支持打印——iOS Safari、微信/QQ 内置浏览器都属于这一类。
+       判断依据只用 beforeprint，不猜机型：同一台手机上 Chrome 能打、微信里不能。 */
+    setTimeout(function () {
+      if (!printStarted) {
+        toast('这台设备没弹出打印框。手机上的浏览器——尤其微信里打开的——大多不能打印。要用纸，用电脑打开这个文件。', 12000);
+      }
+    }, 800);
+  }
+
+  document.getElementById('printBtn').addEventListener('click', function () { doPrint(null); });
+  document.getElementById('printBtn2').addEventListener('click', function () { doPrint(null); });
+  document.getElementById('printChBtn').addEventListener('click', function () { doPrint(curId); });
+  document.getElementById('printChBtn2').addEventListener('click', function () { doPrint(curId); });
+
+  window.addEventListener('afterprint', function () {
+    printStarted = true;
+    document.documentElement.removeAttribute('data-print');
+    setScope(null);
+    document.querySelectorAll('details').forEach(function (d) {
+      if (d.dataset.wasClosed) { d.open = false; delete d.dataset.wasClosed; }
+    });
+    activate(location.hash.slice(1) || ids[0], { focus: false });
+    /* 写盘是浏览器的事，页面拿不到任何进度。能做的只有把「要等」这句话说在
+       对话框刚关掉的那一刻——不然下一步就是双击一个还没写完的文件。 */
+    toast('存好了？等两三秒再打开——文件还在往硬盘里写，这会儿双击会提示「无法打开」。', 9000);
+  });
+
+  /* 打印前（Ctrl+P 直接打印的路径）也要展开 */
+  window.addEventListener('beforeprint', function () {
+    printStarted = true;
+    document.querySelectorAll('details').forEach(function (d) { d.open = true; });
+    secs.forEach(function (s) { s.hidden = false; });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSheet();
+  });
+
+  activate(location.hash.slice(1) || ids[0], { focus: false });
+
+  /* ?print=ch3：只设打印范围，不自己弹窗。给命令行批量出 PDF 用，也可以存成「直接打印第三章」的链接 */
+  var qp = null;
+  try { qp = new URLSearchParams(location.search).get('print'); } catch (e) {}
+  if (qp && ids.indexOf(qp) > -1) {
+    activate(qp, { focus: false });
+    setScope(qp);
+    document.querySelectorAll('details').forEach(function (d) {
+      if (!d.open) { d.dataset.wasClosed = '1'; d.open = true; }
+    });
+  }
+
+  /* 带 #ch3 直接打开时，浏览器会自动滚到锚点，把标题顶进固定栏底下 */
+  function resetTop() { window.scrollTo(0, 0); }
+  resetTop();
+  window.addEventListener('load', function () {
+    resetTop();
+    requestAnimationFrame(resetTop);
+  });
+  window.addEventListener('pageshow', resetTop);
+})();
+
+</script>
+</body>
+</html>

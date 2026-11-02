@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-把 index.html 渲染成 PDF：全册一份、每章各一份。
+把 smoke/index.html 渲染成 PDF：全册一份、每章各一份。
 
-用法（在项目根目录）：
+用法（在 smoke 目录）：
     python tools/build_pdfs.py
 
-产物在 dist/pdf/。PDF 是产出的副产物，源永远是 index.html——
+产物在 dist/pdf/。PDF 是副产物，源永远是 index.html——
 改了正文字句或版式之后要重跑一次，否则 PDF 是旧的。
 
 页码不在这里做。它由 index.html 打印样式里的 @page 边距盒生成，
-Chrome 直接印进 PDF。这个脚本只干两件事：
+Chrome 直接印进 PDF。这个脚本只干三件事：
 
 1. 逐章渲染、数页数，推出每章在全册里从第几页开始，把页码写回
    index.html 封面那张「纸面索引」的 data-pg 占位符（屏幕上隐藏，只有打印才出现）。
 2. 渲染全册，检查有没有空白页，以及只剩一行页脚的「薄页」。
+3. 报告每章页数，方便发现分页事故。
 """
 
 from pathlib import Path
@@ -31,13 +32,14 @@ FULL_NAME = "全册.pdf"
 # (输出文件名, ?print= 的值)　顺序必须与正文里的章节顺序一致
 CHAPTERS = [
     ("00-写在前面.pdf", "start"),
-    ("01-你的胃，最先撑不住.pdf", "ch1"),
-    ("02-吃：一天三顿，能救回来.pdf", "ch2"),
-    ("03-睡：熄灯之后.pdf", "ch3"),
-    ("04-心：脑子停不下来.pdf", "ch4"),
-    ("05-动：你每天都在跑.pdf", "ch5"),
-    ("06-眼与身体：坐 14 小时之后.pdf", "ch6"),
-    ("07-生病了，去哪儿.pdf", "ch7"),
+    ("01-一根烟烧出了什么.pdf", "ch1"),
+    ("02-二手烟：你没抽，但你在吸.pdf", "ch2"),
+    ("03-三手烟：烟散了，东西还在.pdf", "ch3"),
+    ("04-电子烟：换了个壳.pdf", "ch4"),
+    ("05-为什么明知有害还抽.pdf", "ch5"),
+    ("06-戒：不是意志力的事.pdf", "ch6"),
+    ("07-不抽烟的人，能做什么.pdf", "ch7"),
+    ("08-结语与一页数字.pdf", "end"),
 ]
 
 BROWSERS = [
@@ -71,7 +73,7 @@ def render(browser, url, dest):
 def inspect(path):
     """返回 (页数, 空白页, 薄页)。
 
-    空白页 = 几乎没有文字，属于事故（上次「30 页全白」那个坑）。
+    空白页 = 几乎没有文字，属于事故。
     薄页   = 一页只剩一两行字，读者会以为书印坏了。
     """
     from pypdf import PdfReader
@@ -181,7 +183,7 @@ def main():
 
     print("\n" + "=" * 56)
     for name, pages, state in rows:
-        print(f"{name:<28} {str(pages):>3} 页  {state}")
+        print(f"{name:<34} {str(pages):>3} 页  {state}")
     print("=" * 56)
     print(f"输出目录：{OUT}")
 
