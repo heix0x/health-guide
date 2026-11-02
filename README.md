@@ -2,7 +2,11 @@
 
 两本给普通人看的健康读物，同一个仓库。
 
+**English:** Two printable Chinese health guides — single-file HTML, A4 PDF, no build step. Read them online, print them, or grab the PDF from Releases.
+
 它们不解决「怎么活得更久」，只解决「现在这个状况算不算事、能做什么」。都能查、能打印，不用从头读到尾。
+
+在线阅读：https://teen-gut-health-guide.app.workbuddy.host/?sharecode=YED3TRN3YC
 
 ## 两本书
 
@@ -80,3 +84,11 @@ smoke/                 子项目二：一根烟的事
 ## 免责
 
 两本书都是健康科普，不构成诊疗建议或用药指导。持续不适请就医。
+
+## 许可
+
+本仓库全部内容——两本书的正文、`index.html`、构建脚本、生成的 PDF——以 **CC BY-NC-SA 4.0** 授权。
+
+一段人话：你可以把这两本印出来发给学生、转载到自己的公众号或班级群、摘几段重排，**只要注明出处、不作商业用途、改过的也照样开放**。不可以拿去开付费课、写成带货文案、印成书卖。
+
+为什么不给脚本单独开 MIT、为什么不用最宽松的 MIT——理由写在 [`docs/部署与发布.md`](docs/部署与发布.md#许可证为什么不是-mit)。全文见 [`LICENSE`](LICENSE)。
