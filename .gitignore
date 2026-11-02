@@ -8,6 +8,9 @@
 # 发布产物：tools/assemble_public.py 每次清空重建，不进库
 public/
 
+# Release 附件暂存
+out/
+
 # 临时截图与测试产物（都以 . 开头）
 .*.png
 .*.pdf
