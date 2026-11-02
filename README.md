@@ -8,7 +8,9 @@
 
 在线阅读：https://teen-gut-health-guide.app.workbuddy.host/?sharecode=YED3TRN3YC
 
-仓库：https://github.com/heix0x/health-guide　·　成品 PDF：[Releases](https://github.com/heix0x/health-guide/releases/latest)
+仓库：<https://github.com/heix0x/health-guide>
+
+成品 PDF 在 [Releases](https://github.com/heix0x/health-guide/releases/latest)。
 
 ## 两本书
 
