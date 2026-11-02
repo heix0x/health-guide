@@ -8,7 +8,7 @@
 
 **仓库公开，允许别人读、也允许别人按规矩再分。**
 
-- 公开到 `github.com/heix0x/health-guide`，首次 Release 附两本全册 PDF。
+- 公开到 `github.com/heix0x/health-guide`，首次 Release 附两本全册 PDF（`student-health-guide-v2.2.pdf`、`smoke-guide-v2.2.pdf`，附件名用 ASCII——中文名经 API 上传会被截成 `-v2.2.pdf`）。
 - 新增 `LICENSE`：CC BY-NC-SA 4.0 官方全文 + 中文摘要。README 末尾加「许可」一节。
 - 「为什么不用 MIT」写进 `docs/部署与发布.md`：CC 四个维度、MIT 放在书上的三个后果、双许可为什么最后没拆。
 - `docs/待办-根目录改名.md` 的 5 处绝对路径（含 `C:\Users\<用户名>`）改为 `$env:USERPROFILE` 占位符——公开前唯一必须处理的隐私点。
