@@ -5,6 +5,9 @@
 # 工程运行数据
 .workbuddy/
 
+# 发布产物：tools/assemble_public.py 每次清空重建，不进库
+public/
+
 # 临时截图与测试产物（都以 . 开头）
 .*.png
 .*.pdf

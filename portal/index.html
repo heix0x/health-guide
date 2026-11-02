@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>健康指南</title>
+<meta name="description" content="两本可以查、可以打印的健康册子：给高中生的，和讲烟的。">
+<meta name="theme-color" content="#FAF7F2">
+<style>
+:root{
+  --paper:#FAF7F2;
+  --paper-2:#F3EDE3;
+  --card:#FFFDF9;
+  --ink:#2A2724;
+  --ink-2:#59534B;
+  --ink-3:#8C8478;
+  --line:#E5DDCF;
+  --line-2:#EFE9DE;
+  --accent:#B85F3C;
+  --accent-2:#F5E6DC;
+  --green:#3F5D4E;
+  --radius:14px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.85;
+  letter-spacing:.01em;-webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-2);color:var(--ink)}
+.wrap{max-width:720px;margin:0 auto;padding:72px 24px 96px}
+
+.mark{
+  font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:18px;
+}
+h1{
+  font-size:31px;line-height:1.35;margin:0 0 14px;
+  letter-spacing:.01em;font-weight:700;
+}
+.lede{margin:0 0 6px;font-size:16.5px;color:var(--ink-2);max-width:34em}
+.rule{height:1px;background:var(--line);margin:34px 0 4px;border:0}
+
+.list{list-style:none;margin:0;padding:0}
+.item{
+  display:block;text-decoration:none;color:inherit;
+  padding:26px 24px;margin:14px 0;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);
+  transition:border-color .18s ease,transform .18s ease;
+}
+.item:hover{border-color:#D8CBB6;transform:translateY(-1px)}
+.item:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.item h2{
+  font-size:20px;margin:0 0 6px;font-weight:700;letter-spacing:.02em;
+}
+.item .who{margin:0 0 12px;font-size:14px;color:var(--ink-3)}
+.item .about{margin:0;font-size:15.5px;color:var(--ink-2)}
+.meta{
+  margin:14px 0 0;font-size:12.5px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;
+}
+.go{
+  display:inline-block;margin-top:16px;font-size:13.5px;
+  color:var(--accent);letter-spacing:.04em;
+}
+.go::after{content:" →"}
+
+footer{
+  margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12.5px;line-height:1.9;color:var(--ink-3);
+}
+footer p{margin:0 0 8px}
+
+@media (max-width:600px){
+  .wrap{padding:48px 18px 72px}
+  h1{font-size:25px}
+  .item{padding:22px 18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mark">健康指南</div>
+  <h1>两本可以查的册子</h1>
+  <p class="lede">不解决「怎么活得更久」，只解决「现在这个状况算不算事、能做什么」。都能随手翻到某一页，也都能打印成 A4。</p>
+
+  <hr class="rule">
+
+  <ul class="list">
+    <li>
+      <a class="item" href="student-health/">
+        <h2>高中生身体健康指北</h2>
+        <p class="who">写给高中生，尤其住校的</p>
+        <p class="about">吃、睡、动、心情，还有你的胃。七章，从「你的胃最先撑不住」写到「生病了去哪儿」。</p>
+        <p class="meta">七章 · A4 二十三页 · 可以打印全册，也可以只打一章</p>
+        <span class="go">翻开</span>
+      </a>
+    </li>
+    <li>
+      <a class="item" href="smoke/">
+        <h2>一根烟的事</h2>
+        <p class="who">写给抽烟的人，和每天闻得到烟的人</p>
+        <p class="about">吸烟、二手烟、三手烟，以及那句「关你什么事」。第七章单独写给不抽烟的人。</p>
+        <p class="meta">七章 + 写在前面与结语 · A4 二十二页 · 结语附「只记一页」可撕单页</p>
+        <span class="go">翻开</span>
+      </a>
+    </li>
+  </ul>
+
+  <footer>
+    <p>两本都是健康科普，不构成诊疗建议或用药指导。持续不适请就医。</p>
+    <p>要纸质版：进任意一本，点侧栏「打印全册」；只想打一章，翻到那一章点「只打印这一章」。</p>
+  </footer>
+
+</div>
+
+<!-- 线上访问需要把分享参数带到子路径上，否则子页面会提示「链接不完整」。
+     参数不在源里写死：索引页保持与部署实例无关，谁分享谁带参数。 -->
+<script>
+(function () {
+  var q = location.search;
+  if (!q) return;
+  var items = document.querySelectorAll("a.item");
+  for (var i = 0; i < items.length; i++) {
+    items[i].setAttribute("href", items[i].getAttribute("href") + q);
+  }
+})();
+</script>
+</body>
+</html>
